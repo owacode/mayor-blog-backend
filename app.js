@@ -3,6 +3,7 @@ const app=express();
 const mongoose = require('mongoose');
 const bodyParser= require('body-parser');
 const blog = require('./routes/post');
+const paypal = require('./routes/paypal');
 app.use(bodyParser.json());
 
 const db=mongoose.connect( "mongodb+srv://mohit:mohit787@cluster0-nfvm2.mongodb.net/onewater")
@@ -32,4 +33,5 @@ app.use((req, res, next) => {
   })
 
   app.use('',blog);
+  app.use('/payment',paypal);
   module.exports = app;
