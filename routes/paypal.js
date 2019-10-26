@@ -17,8 +17,8 @@ route.get('/pay', (req, res) => {
         "payment_method": "paypal"
     },
     "redirect_urls": {
-        "return_url": "https://paperlouge.herokuapp.com",
-        "cancel_url": "http://localhost:3000"
+        "return_url": "https://paypal-testing-api.herokuapp.com/success",
+        "cancel_url": "https://paypal-testing-api.herokuapp.com/failed"
     },
     "transactions": [{
         "item_list": {
@@ -79,5 +79,11 @@ route.get('/success', (req, res) => {
         });
     }
 });
+});
+
+route.get('/failed', (req, res) => {
+  res.json({
+    msg:"Payment Failed"
+  })
 });
  module.exports= route;

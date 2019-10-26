@@ -2,7 +2,8 @@ const express=require('express');
 const app=express();
 const mongoose = require('mongoose');
 const bodyParser= require('body-parser');
-const blog = require('./routes/post');
+const postblogs = require('./routes/post_routes');
+const getblogs = require('./routes/get_routes');
 const paypal = require('./routes/paypal');
 app.use(bodyParser.json());
 
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
       })
   })
 
-  app.use('',blog);
+  app.use('',postblogs);
+  app.use('',getblogs);
   app.use('/payment',paypal);
   module.exports = app;
