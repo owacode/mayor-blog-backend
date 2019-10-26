@@ -8,10 +8,10 @@
     "jw-angular-social-buttons": "^1.0.0",
     "mongoose": "^5.6.8",
     "multer": "^1.4.2",
-    "paypal-rest-sdk": "^1.8.1",
     "nodemon": "^1.19.1",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
+    "mongodb-autoincrement": "^1.0.1",
     "zone.js": "~0.8.26"
   }
 }
