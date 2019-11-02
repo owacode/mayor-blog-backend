@@ -11,24 +11,29 @@ class FetchController{
     getApprovedBlogs(value){
       console.log(value,'aaa')
      return new Promise((resolve, reject)=> {
-          const query= ApprovedBlog.find();
-          const pagesize= +value.pagesize;
-          const currentpage= +value.currentpage;
-          let fetchblogs;
+      //     const query= ApprovedBlog.find();
+      //     const pagesize= +value.pagesize;
+      //     const currentpage= +value.currentpage;
+      //     let fetchblogs;
 
-          if(pagesize && currentpage){
-            query
-            .skip(pagesize * (currentpage - 1))
-            .limit(pagesize);
-          }
-          query
-          .then(documents=> {
-            // console.log(documents,'dsdw');
-            fetchblogs= documents;
-            return Blog.count();
-          })
-          .then(totalBlogs=> resolve(fetchblogs, totalBlogs))
-          .catch(err => reject(err));
+      //     if(pagesize && currentpage){
+      //       query
+      //       .skip(pagesize * (currentpage - 1))
+      //       .limit(pagesize);
+      //     }
+      //     query
+      //     .then(documents=> {
+      //       // console.log(documents,'dsdw');
+      //       fetchblogs= documents;
+      //       return Blog.count();
+      //     })
+      //     .then(totalBlogs=> resolve(fetchblogs, totalBlogs))
+      //     .catch(err => reject(err));
+      ApprovedBlog.find({})
+      .then(result=> {
+        // console.log(result);
+        resolve(result)})
+      .catch(err=> reject(err));
       })
     }
 
@@ -53,9 +58,9 @@ class FetchController{
     }
 
 
-    getApprovedBlogs(){
+    getSingleApprovedBlogs(id){
       return new Promise((resolve, reject)=> {
-        ApprovedBlog.find({})
+        ApprovedBlog.find({_id:id})
         .then(result=> {
           // console.log(result);
           resolve(result)})
@@ -124,12 +129,41 @@ class FetchController{
       })
     }
 
-    getBlogsByaAuthor(id){
+    getApprovedBlogsByAuthor(id){
       return new Promise((resolve, reject)=> {
         this.getSingleApprovedAuthor({_id:id})
         .then(result=> {
-          let blogs_id=result.blogs_added;
+          let blogs_id=result[0].approved_blogs_added;
           return ApprovedBlog.find({_id:{$in:blogs_id}})
+        })
+        .then(result=> {
+          resolve(result);
+        })
+        .catch(err=> reject(err));
+      })
+    }
+
+    getUnapprovedBlogsByAuthor(id){
+      return new Promise((resolve, reject)=> {
+        this.getSingleApprovedAuthor({_id:id})
+        .then(result=> {
+          let blogs_id=result[0].unapproved_blogs_added;
+          return NotApprovedBlog.find({_id:{$in:blogs_id}})
+        })
+        .then(result=> {
+          resolve(result);
+        })
+        .catch(err=> reject(err));
+      })
+    }
+
+    getAllBlogsByAuthor(id){
+      return new Promise((resolve, reject)=> {
+        this.getSingleApprovedAuthor({_id:id})
+        .then(result=> {
+          let blogs_id=result[0].all_blogs_added;
+          console.log(blogs_id);
+          return AllBlog.find({_id:{$in:blogs_id}})
         })
         .then(result=> {
           resolve(result);

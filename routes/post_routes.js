@@ -26,6 +26,7 @@ routes.post('/addimage', upload.single('image') ,async(req,res)=>{
 })
 // Route for UnApproved BLogs
 routes.post('/unapproved-blog', upload.single('image') ,async(req,res)=>{
+  console.log(req.body);
   const result= await cloudinary.v2.uploader.upload(req.file.path)
   .catch((err)=>{
       new Promise(() => { throw new Error('exception!'); });
@@ -87,7 +88,56 @@ routes.post('/reject-blog', (req, res)=>{
 })
 
 // Route for UnApproved Author Profile
-routes.post('/unapproved-author', upload.single('image') ,async(req,res)=>{
+routes.post('/unapproved-author',async(req,res)=>{
+  adderController.addUnApprovedAuthor(req.body)
+  .then(result=> {
+    // adderController.addAuthorToMain(result);
+    res.status(200).json({
+    status:"success",
+    msg:"Profile is send for verification you will be respond back in 24 hours"
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+// Route for Login
+routes.post('/login',async(req,res)=>{
+  adderController.login(req.body)
+  .then(result=> {
+    // adderController.addAuthorToMain(result);
+    res.status(200).json({
+    status:"success",
+    msg:"Login Successfull",
+    result:result
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+// This is to Verify the Email
+
+routes.get('/activate/:token', (req, res) => {
+  adderController.verifyMail(req.params)
+  .then(result =>{
+      res.status(200).json({
+        status:'success',
+        msg:"Email Verified Successfully"
+      })
+  })
+  .catch(err => {
+    res.status(400).json({
+      status:'error',
+      error:err
+    })
+  })
+})
+// Route for UnApproved Author Profile
+routes.post('/update-authorprofile', upload.single('author_image') ,async(req,res)=>{
+  console.log(req.body);
   const result= await cloudinary.v2.uploader.upload(req.file.path)
   .catch(err =>{
     new Promise(()=>{ throw new Error('exception!'); });
@@ -95,7 +145,7 @@ routes.post('/unapproved-author', upload.single('image') ,async(req,res)=>{
   })
   const imagepath= result.url;
   req.body.imageurl=imagepath;
-  adderController.addUnApprovedAuthor(req.body)
+  updateController.updateAuthorProfile(req.body)
   .then(result=> {
     // adderController.addAuthorToMain(result);
     res.status(200).json({

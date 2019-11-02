@@ -63,6 +63,20 @@ routes.get('/singlenotappblog/:id', (req, res)=>{
   }));
 })
 
+// Route for Getting Single ApprovedBlog Authors
+routes.get('/singleappblog/:id', (req, res)=>{
+  fetchController.getSingleApprovedBlogs(req.params.id)
+  .then(result => res.status(200).json({
+    status:"success",
+    msg:"Single Approved Blog Fetch Successfully",
+    result:result
+  }))
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
 // Route for Getting All Not Approved Authors
 routes.get('/notauthor', (req, res)=>{
   fetchController.getNotApprovedAuthor()
@@ -133,8 +147,41 @@ routes.get('/allauthor', (req, res)=>{
   }));
 })
 
-routes.get('/authorblogs/:id', (req, res)=> {
-  fetchController.getBlogsByaAuthor(req.params.id)
+routes.get('/authorapprovedblogs/:id', (req, res)=> {
+  console.log(req.params,'kksnkk')
+  fetchController.getApprovedBlogsByAuthor(req.params.id)
+  .then(result=> {
+    res.json({
+      status:"success",
+      msg:"Blogs by Author Fetch Successfully",
+      result:result
+    })
+  })
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+routes.get('/authorunapprovedblogs/:id', (req, res)=> {
+  console.log(req.params,'kksnkk')
+  fetchController.getUnapprovedBlogsByAuthor(req.params.id)
+  .then(result=> {
+    res.json({
+      status:"success",
+      msg:"Blogs by Author Fetch Successfully",
+      result:result
+    })
+  })
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+routes.get('/authorallblogs/:id', (req, res)=> {
+  console.log(req.params,'kksnkk')
+  fetchController.getAllBlogsByAuthor(req.params.id)
   .then(result=> {
     res.json({
       status:"success",
