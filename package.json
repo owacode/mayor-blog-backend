@@ -12,6 +12,7 @@
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "mongodb-autoincrement": "^1.0.1",
+    "mongoose-unique-validator": "^2.0.3",
     "zone.js": "~0.8.26"
   }
 }
