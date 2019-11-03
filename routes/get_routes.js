@@ -48,6 +48,20 @@ routes.get('/allblogs', (req, res)=>{
   }));
 })
 
+// Route for Getting a allBlogs
+routes.get('/allblogs/:id', (req, res)=>{
+  fetchController.getSingleAllBlogs(req.params)
+  .then(result => res.status(200).json({
+    status:"success",
+    msg:"Blog Fetch Successfully",
+    result:result
+  }))
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
 
 // Route for Getting Single NOtApprovedBlog Authors
 routes.get('/singlenotappblog/:id', (req, res)=>{
@@ -65,6 +79,7 @@ routes.get('/singlenotappblog/:id', (req, res)=>{
 
 // Route for Getting Single ApprovedBlog Authors
 routes.get('/singleappblog/:id', (req, res)=>{
+  console.log(req.params,'dwdnwklnkw');
   fetchController.getSingleApprovedBlogs(req.params.id)
   .then(result => res.status(200).json({
     status:"success",

@@ -1,3 +1,4 @@
+
 const express= require('express');
 const routes= express.Router();
 const upload=require('./multer');
@@ -114,7 +115,7 @@ routes.post('/login',async(req,res)=>{
   })})
   .catch(err =>res.status(200).json({
     status:"error",
-    payload:err
+    msg:err
   }));
 })
 
@@ -123,10 +124,7 @@ routes.post('/login',async(req,res)=>{
 routes.get('/activate/:token', (req, res) => {
   adderController.verifyMail(req.params)
   .then(result =>{
-      res.status(200).json({
-        status:'success',
-        msg:"Email Verified Successfully"
-      })
+      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
   })
   .catch(err => {
     res.status(400).json({
@@ -190,6 +188,21 @@ routes.post('/reject-author', (req, res)=>{
     res.status(200).json({
     status:"success",
     msg:"Author Profile Rejected"
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+// Route for Getting Details of Author Profile
+routes.get('/single-author/:id', (req, res)=>{
+  fetchController.getSingleApprovedAuthor(req.params.id)
+  .then(result => {
+    res.status(200).json({
+    status:"success",
+    msg:"Author Profile",
+    result:result
   })})
   .catch(err =>res.status(200).json({
     status:"error",

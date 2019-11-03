@@ -186,9 +186,11 @@ class AdderOperationController{
           date_added:result.date_added,
           date_approved:new Date(),
           image:result.image,
+          location:result.location,
           followers:[],
           following:[],
           interest_category:result.interest_category,
+          email:result.email,
           linkedIn_id:result.linkedIn_id,
           instagram_id:result.instagram_id,
           twitter_id:result.twitter_id,
@@ -323,6 +325,8 @@ login(userdata){
       })
     })
 }
+
+
 
 
 }

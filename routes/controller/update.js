@@ -29,10 +29,12 @@ class UpdateController{
 
     updateAuthorProfile(values){
       console.log(values,'author iddddddd')
-        NotApprovedAuthor.findByIdAndUpdate({_id:values.id},{
+      return new Promise((resolve,reject)=> {
+                  NotApprovedAuthor.findByIdAndUpdate({_id:values.id},{
           $set:{
             about_author:values.about_author,
             image:values.imageurl,
+            location:values.location,
             interest_category:values.interest_category,
             linkedIn_id:values.linkedIn,
             twitter_id:values.twitter,
@@ -43,8 +45,11 @@ class UpdateController{
         .then(result => {
           console.log('Updated to NotApprovedAuthor');
           this.updateAuthorProfileMain(values);
+          resolve(result);
         })
-        .catch(err =>console.log('error in updating approve',err));
+        .catch(err =>console.log('error in updating approve',err));        
+      })
+
     }
     // Update Profile of Author TO Main Collection
 

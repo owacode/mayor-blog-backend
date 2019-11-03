@@ -3,9 +3,10 @@ const validator=require('mongoose-unique-validator');
 
 const author = mongoose.Schema({
   name:{type: String,required:true},
-  about_author:{type: String,required:true},
-  image:{type: String,required:true},
+  about_author:{type: String},
+  image:{type: String},
   date_added:{type: Date},
+  location:{type: String},
   linkedIn_id:{type: String},
   instagram_id:{type: String},
   twitter_id:{type: String},
