@@ -50,7 +50,7 @@ routes.get('/allblogs', (req, res)=>{
 
 // Route for Getting a allBlogs
 routes.get('/allblogs/:id', (req, res)=>{
-  fetchController.getSingleAllBlogs(req.params)
+  fetchController.getSingleAllBlogs(req.params.id)
   .then(result => res.status(200).json({
     status:"success",
     msg:"Blog Fetch Successfully",
