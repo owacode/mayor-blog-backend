@@ -5,7 +5,7 @@ const blog = mongoose.Schema({
   title:{type: String,required:true},
   category:[],
   date_added:{type: Date},
-  // author_name:{type:String},
+  desc:{type:String},
   image:{type: String,required:true},
   rejected:{type:Boolean, default:false},
   status:{type:String, default:'pending'}

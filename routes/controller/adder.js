@@ -112,7 +112,7 @@ class AdderOperationController{
         title:values.title,
         category:values.category,
         date_added:new Date(),
-        // author_name:values.authorname,
+        desc:values.desc,
         image:values.imageurl
       })
 
