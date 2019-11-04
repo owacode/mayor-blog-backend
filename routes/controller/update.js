@@ -80,6 +80,15 @@ class UpdateController{
       .then(result => console.log('Updated to approved'))
       .catch(err =>console.log('error in updating approve',err));
   }
+
+  //Add UnApproved id of Blog to Main Blog
+
+  addUnapproveIdToMainBlog(values){
+    console.log(values,'author iddddddd')
+      AllBlog.findByIdAndUpdate({_id:values.mainid},{$set:{unapproved_id:values.blogid}})
+      .then(result => console.log('Updated to approved'))
+      .catch(err =>console.log('error in updating approve',err));
+  }
   // Approve a Author
 
   approveAuthor(values){

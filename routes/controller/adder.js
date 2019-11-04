@@ -52,6 +52,11 @@ class AdderOperationController{
               }
               console.log(id,'mohit author$$$$$$$$$$$$')
               this.addUnapprovedBlogToUser(id);
+              const id={
+                mainid=result.main_id,
+                blogid:result._id,
+              }
+              updateController.addUnapproveIdToMainBlog(id);
               resolve(result);
             })
             .catch(err=> reject(err));
@@ -107,6 +112,7 @@ class AdderOperationController{
     return new Promise((resolve, reject)=>{
       const blog= new AllBlog({
         approved_id:'null',
+        unapproved_id:'null',
         author_id:values.authorid,
         rejected:false,
         status:'pending',
