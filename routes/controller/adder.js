@@ -45,14 +45,14 @@ class AdderOperationController{
           })
 
             .then((result)=>{
-              const id={
+              let id={
                 authorid:result.author_id,
                 blogid:result._id,
                 mainid:result.main_id
               }
               console.log(id,'mohit author$$$$$$$$$$$$')
               this.addUnapprovedBlogToUser(id);
-              const id={
+              let id={
                 mainid:result.main_id,
                 blogid:result._id,
               }
