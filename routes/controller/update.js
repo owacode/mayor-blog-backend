@@ -60,6 +60,7 @@ class UpdateController{
                 about_author:values.about_author,
                 image:values.imageurl,
                 interest_category:values.interest_category,
+                location:values.location,
                 linkedIn_id:values.linkedIn,
                 twitter_id:values.twitter,
                 facebook_id:values.facebook,

@@ -140,6 +140,16 @@ class FetchController{
       })
     }
 
+    getSingleAllAuthor(id){
+      return new Promise((resolve, reject)=> {
+        AllAuthor.find({_id:id})
+        .then(result=> {
+          // console.log(result);
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
     getApprovedBlogsByAuthor(id){
       return new Promise((resolve, reject)=> {
         this.getSingleApprovedAuthor({_id:id})

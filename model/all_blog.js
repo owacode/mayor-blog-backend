@@ -2,6 +2,7 @@ const mongoose= require('mongoose');
 
 const blog = mongoose.Schema({
   approved_id:{type:String},
+  author_id:{type:String},
   title:{type: String,required:true},
   category:[],
   date_added:{type: Date},

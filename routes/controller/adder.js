@@ -79,7 +79,7 @@ class AdderOperationController{
           date_added:result.date_added,
           date_approved:date,
           author_id:result.author_id,
-          author_name:result.author_name,
+          main_id:result.main_id,
           desc:result.desc,
           likes:[],
           blog_no:0,
@@ -107,6 +107,7 @@ class AdderOperationController{
     return new Promise((resolve, reject)=>{
       const blog= new AllBlog({
         approved_id:'null',
+        author_id:values.authorid,
         rejected:false,
         status:'pending',
         title:values.title,
