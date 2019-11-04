@@ -52,7 +52,7 @@ class AdderOperationController{
               }
               console.log(id,'mohit author$$$$$$$$$$$$')
               this.addUnapprovedBlogToUser(id);
-              let id={
+              id={
                 mainid:result.main_id,
                 blogid:result._id,
               }
