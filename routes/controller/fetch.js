@@ -4,6 +4,7 @@ const NotApprovedAuthor= require('../../model/unapproved_author');
 const ApprovedAuthor= require('../../model/approved_author');
 const ApprovedBlog= require('../../model/approved_blog');
 const AllBlog= require('../../model/all_blog');
+const HomeBlog= require('../../model/homeblog');
 const AllAuthor= require('../../model/all_author');
 
 class FetchController{
@@ -47,6 +48,23 @@ class FetchController{
       })
     }
 
+    getHomeBlogs(){
+      return new Promise((resolve, reject)=> {
+        HomeBlog.find({})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
+    getHomeSingleBlogs(id){
+      return new Promise((resolve, reject)=> {
+        HomeBlog.find({_id:id})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
     getSingleAllBlogs(id){
       return new Promise((resolve, reject)=> {
         AllBlog.find({_id:id})
@@ -89,6 +107,50 @@ class FetchController{
         })
       })
     }
+
+    getApprovedBlogsByAuthor(id){
+      return new Promise((resolve, reject)=> {
+        this.getSingleApprovedAuthor({_id:id})
+        .then(result=> {
+          let blogs_id=result[0].approved_blogs_added;
+          return ApprovedBlog.find({_id:{$in:blogs_id}})
+        })
+        .then(result=> {
+          resolve(result);
+        })
+        .catch(err=> reject(err));
+      })
+    }
+
+    getUnapprovedBlogsByAuthor(id){
+      return new Promise((resolve, reject)=> {
+        this.getSingleApprovedAuthor({_id:id})
+        .then(result=> {
+          let blogs_id=result[0].unapproved_blogs_added;
+          return NotApprovedBlog.find({_id:{$in:blogs_id}})
+        })
+        .then(result=> {
+          resolve(result);
+        })
+        .catch(err=> reject(err));
+      })
+    }
+
+    getAllBlogsByAuthor(id){
+      return new Promise((resolve, reject)=> {
+        this.getSingleApprovedAuthor({_id:id})
+        .then(result=> {
+          let blogs_id=result[0].all_blogs_added;
+          console.log(blogs_id);
+          return AllBlog.find({_id:{$in:blogs_id}})
+        })
+        .then(result=> {
+          resolve(result);
+        })
+        .catch(err=> reject(err));
+      })
+    }
+
 /* <!------------------------------------------------------**********BLOG END***********-------------------------------------------!> */
     getNotApprovedAuthor(){
       return new Promise((resolve, reject)=> {
@@ -149,50 +211,6 @@ class FetchController{
         .catch(err=> reject(err));
       })
     }
-
-    getApprovedBlogsByAuthor(id){
-      return new Promise((resolve, reject)=> {
-        this.getSingleApprovedAuthor({_id:id})
-        .then(result=> {
-          let blogs_id=result[0].approved_blogs_added;
-          return ApprovedBlog.find({_id:{$in:blogs_id}})
-        })
-        .then(result=> {
-          resolve(result);
-        })
-        .catch(err=> reject(err));
-      })
-    }
-
-    getUnapprovedBlogsByAuthor(id){
-      return new Promise((resolve, reject)=> {
-        this.getSingleApprovedAuthor({_id:id})
-        .then(result=> {
-          let blogs_id=result[0].unapproved_blogs_added;
-          return NotApprovedBlog.find({_id:{$in:blogs_id}})
-        })
-        .then(result=> {
-          resolve(result);
-        })
-        .catch(err=> reject(err));
-      })
-    }
-
-    getAllBlogsByAuthor(id){
-      return new Promise((resolve, reject)=> {
-        this.getSingleApprovedAuthor({_id:id})
-        .then(result=> {
-          let blogs_id=result[0].all_blogs_added;
-          console.log(blogs_id);
-          return AllBlog.find({_id:{$in:blogs_id}})
-        })
-        .then(result=> {
-          resolve(result);
-        })
-        .catch(err=> reject(err));
-      })
-    }
-
   }
 
   module.exports= new FetchController()

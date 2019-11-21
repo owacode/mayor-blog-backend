@@ -7,7 +7,8 @@ const auoInCrease = require('mongodb-autoincrement');
  */
 const blog = mongoose.Schema({
   title:{type: String,required:true},
-  category:[],
+  category:{type: String,required:true},
+  sub_category:{type: String,required:true},
   date_added:{type: String},
   date_approved:{type: Date},
   author_id:{type:String, require:true},

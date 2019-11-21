@@ -4,6 +4,7 @@ const NotApprovedAuthor= require('../../model/unapproved_author');
 const ApprovedAuthor= require('../../model/approved_author');
 const ApprovedBlog= require('../../model/approved_blog');
 const AllBlog= require('../../model/all_blog');
+const HomeBlog= require('../../model/homeblog');
 const AllAuthor= require('../../model/all_author');
 
 // Controllers
@@ -16,12 +17,32 @@ const nodemailer= require('nodemailer');
 const transporter = nodemailer.createTransport({
   service:'gmail',
   auth: {
-      user: 'bookseller797@gmail.com',
-      pass: '9617303525'
+      user: 'onewateracademy1@gmail.com',
+      pass: 'onewater@123'
   }
 });
 let token;
 class AdderOperationController{
+
+  // Add Blog to Home The Home Page Blogs ( 3 Blogs )
+  addHomeBlog(value){
+    console.log('hitfefe',value)
+    return new Promise((resolve, reject)=>{
+          const blog = new HomeBlog({
+            title:value.title,
+            category:value.category,
+            date_added:getTime(),
+            desc:value.desc,
+            image:value.imageurl
+          })
+         blog.save()
+          .then((result)=>{
+            resolve(result);
+          })
+          .catch(err=> reject(err));
+    })
+  }
+
   // This methord is for posting a new blog
   //Initially Posting a New Blog will be saved in notapproved collection
     addNewBlogToUnApproved(value){
@@ -33,7 +54,7 @@ class AdderOperationController{
             const blog = new NotApprovedBlog({
               title:value.title,
               category:value.category,
-              date_added:new Date(),
+              date_added:getTime(),
               author_id:value.authorid,
               // author_name:value.authorname,
               desc:value.desc,
@@ -66,23 +87,19 @@ class AdderOperationController{
       // This methord is for posting a new blog
   //Initially Posting a New Blog will be saved in notapproved collection
   addNewBlogToApproved(value){
-    console.log(value,value.id);
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-              "July", "August", "September", "October", "November", "December"
-           ];
+    console.log(value,'approved details category');
     return new Promise((resolve, reject)=>{
 
-      var today = new Date();
-      var date = monthNames[today.getMonth()]+'/'+today.getDate()+'/'+today.getFullYear();
       // First Deleting the unapproved blog from the collection
       deleteController.deleteUnapprovedBlog(value.id)
       .then(result => {
         // console.log("not approved blog", result);
         const blog = new ApprovedBlog({
           title:result.title,
-          category:result.category,
+          category:value.category,
+          sub_category:value.subcategory,
           date_added:result.date_added,
-          date_approved:date,
+          date_approved:getTime(),
           author_id:result.author_id,
           main_id:result.main_id,
           desc:result.desc,
@@ -118,7 +135,7 @@ class AdderOperationController{
         status:'pending',
         title:values.title,
         category:values.category,
-        date_added:new Date(),
+        date_added:getTime(),
         desc:values.desc,
         image:values.imageurl
       })
@@ -133,6 +150,33 @@ class AdderOperationController{
         reject(err);
       })
     })
+  }
+
+    // This methord is for adding the blogid to the author account (only for approved blogs)
+    addApprovedBlogToUser(values){
+      ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{
+        $addToSet: {approved_blogs_added: values.blogid}
+      })
+      .then(result=>console.log("Adding blog to account Successfull",result))
+      .catch(err=> console.log("Adding blog to account Error", err));
+  }
+
+    // This methord is for adding the blogid to the author account (for unapproved and all blogs)
+    addUnapprovedBlogToUser(values){
+        ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{
+          $addToSet: {unapproved_blogs_added: values.blogid, all_blogs_added:values.mainid}
+        })
+        .then(result=>console.log("Adding blog to account Successfull",result))
+        .catch(err=> console.log("Adding blog to account Error", err));
+    }
+
+  addLikeBlogToUser(values){
+    const like={
+      blogid:values.blogid
+    }
+    ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{ $addToSet: { liked_blog: like} })
+          .then(result => console.log("Blog liked added to user"))
+          .catch(err => console.log("Error in Adding Blog to liked"))
   }
 
   // This is for adding the new author
@@ -155,7 +199,7 @@ class AdderOperationController{
           facebook_id:'null',
           email:values.email,
           instagram_id:'null',
-          date_added:new Date(),
+          date_added:getTime(),
           main_id:result._id,
           verified:false,
           token:result.token,
@@ -191,7 +235,7 @@ class AdderOperationController{
           name:result.name,
           about_author:result.about_author,
           date_added:result.date_added,
-          date_approved:new Date(),
+          date_approved:getTime(),
           image:result.image,
           location:result.location,
           followers:[],
@@ -221,28 +265,6 @@ class AdderOperationController{
     })
   }
 
-// Login Function
-login(userdata){
-  return new Promise ((resolve, reject)=> {
-    console.log(userdata);
-    AllAuthor.find({email:userdata.email})
-    .then(result=> {
-      console.log('%%%%%%%', result)
-      if(result.length==0){
-          return reject('No User Found')
-      }
-      const passdata=sha512(userdata.password, result[0].salt);
-      if(result[0].password !== passdata.passwordHash){
-         return reject("Incorrect Password");
-      }
-      if(result[0].verified == false) return reject("User Email not Verified");
-      const token=jwt.sign({email:result[0].email,userid:result[0]._id},'%%%$$#book!*!(se!!ing^^&min%$#*)((//or'
-      )
-      console.log(result[0]._id, result[0].unapproved_id)
-      resolve({token:token, email:userdata.email, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id});
-    })
-  })
-}
     //This is for adding the Author to collection where all the Authors are stored
     addAuthorToMain(values){
       token = jwt.sign({email:values.email}, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
@@ -260,7 +282,7 @@ login(userdata){
               status:'pending',
               name:values.name,
               interest_category:'null',
-              date_added:new Date(),
+              date_added:getTime(),
               linkedIn_id:'null',
               twitter_id:'null',
               facebook_id:'null',
@@ -286,32 +308,28 @@ login(userdata){
       })
     }
 
-  // This methord is for adding the blogid to the author account (only for approved blogs)
-  addApprovedBlogToUser(values){
-      ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{
-        $addToSet: {approved_blogs_added: values.blogid}
-      })
-      .then(result=>console.log("Adding blog to account Successfull",result))
-      .catch(err=> console.log("Adding blog to account Error", err));
-  }
-
-    // This methord is for adding the blogid to the author account (for unapproved and all blogs)
-    addUnapprovedBlogToUser(values){
-        ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{
-          $addToSet: {unapproved_blogs_added: values.blogid, all_blogs_added:values.mainid}
-        })
-        .then(result=>console.log("Adding blog to account Successfull",result))
-        .catch(err=> console.log("Adding blog to account Error", err));
-    }
-
-  addLikeBlogToUser(values){
-    const like={
-      blogid:values.blogid
-    }
-    ApprovedAuthor.findByIdAndUpdate({_id:values.authorid},{ $addToSet: { liked_blog: like} })
-          .then(result => console.log("Blog liked added to user"))
-          .catch(err => console.log("Error in Adding Blog to liked"))
-  }
+// Login Function
+login(userdata){
+  return new Promise ((resolve, reject)=> {
+    console.log(userdata);
+    AllAuthor.find({email:userdata.email})
+    .then(result=> {
+      console.log('%%%%%%%', result)
+      if(result.length==0){
+          return reject('No User Found')
+      }
+      const passdata=sha512(userdata.password, result[0].salt);
+      if(result[0].password !== passdata.passwordHash){
+         return reject("Incorrect Password");
+      }
+      if(result[0].verified == false) return reject("User Email not Verified");
+      const token=jwt.sign({email:result[0].email,userid:result[0]._id},'%%%$$#book!*!(se!!ing^^&min%$#*)((//or'
+      )
+      console.log(result[0]._id, result[0].unapproved_id)
+      resolve({token:token, email:userdata.email, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id});
+    })
+  })
+}
 
     verifyMail(values){
     return new Promise ((resolve, reject)=> {
@@ -333,12 +351,26 @@ login(userdata){
     })
 }
 
-
-
-
 }
 
 module.exports= new AdderOperationController();
+
+// This Function is for Getting IST
+function getTime(){
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+  var currentTime = new Date();
+
+  var currentOffset = currentTime.getTimezoneOffset();
+
+  var ISTOffset = 330;   // IST offset UTC +5:30
+
+  var ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset)*60000);
+
+  // ISTTime now represents the time in IST coordinates
+  return ISTTime;
+}
 
 //  ################################# Crypto Salt Hash Functions Start ###############################
 var genRandomString = function(length){
@@ -374,7 +406,7 @@ return new Promise((resolve, reject)=> {
 function verifyUser(email){
   console.log('$$$$$$$$$',email,token);
     let sendingMail = {
-      from:' "OneWater 👻" <onewater@gmail.com> ',
+      from:' "OneWater " <onewateracademy1@gmail.com> ',
       to: email,
       subject: "Verify Account✔", // Subject line
       text: "Verify your Email to get started with Selling and Buying of Books",

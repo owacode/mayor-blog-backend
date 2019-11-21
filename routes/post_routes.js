@@ -10,7 +10,7 @@ const deleteController= require('./controller/delete');
 const updateController= require('./controller/update');
 const fetchController= require('./controller/fetch');
 
-
+// This is for adding single image from editor
 routes.post('/addimage', upload.single('image') ,async(req,res)=>{
   console.log('hittttttttttttt',req.file);
   const result= await cloudinary.v2.uploader.upload(req.file.path)
@@ -24,6 +24,54 @@ routes.post('/addimage', upload.single('image') ,async(req,res)=>{
       imagepath:imagepath,
       msg:"Image Added successfully"
     })
+})
+
+// Route for Blog to Home The Home Page Blogs ( 3 Blogs )
+routes.post('/homeblog', upload.single('image') ,async(req,res)=>{
+  console.log(req.body);
+  const result= await cloudinary.v2.uploader.upload(req.file.path)
+  .catch((err)=>{
+      new Promise(() => { throw new Error('exception!'); });
+          console.log(err);
+  })
+  const imagepath=result.url;
+  req.body.imageurl=imagepath;
+  adderController.addHomeBlog(req.body)
+  .then(result=>
+    {
+      res.status(200).json({
+      status:"success",
+      msg:"Blog is added for HomePage",
+      payload:result
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+//Update  Route for Blog to Home The Home Page Blogs ( 3 Blogs )
+routes.patch('/homeblog', upload.single('image') ,async(req,res)=>{
+  console.log(req.body);
+  const result= await cloudinary.v2.uploader.upload(req.file.path)
+  .catch((err)=>{
+      new Promise(() => { throw new Error('exception!'); });
+          console.log(err);
+  })
+  const imagepath=result.url;
+  req.body.imageurl=imagepath;
+  updateController.updateHomeBlog(req.body)
+  .then(result=>
+    {
+      res.status(200).json({
+      status:"success",
+      msg:"Update Blog for HomePage",
+      payload:result
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
 })
 // Route for UnApproved BLogs
 routes.post('/unapproved-blog', upload.single('image') ,async(req,res)=>{
@@ -52,7 +100,7 @@ routes.post('/unapproved-blog', upload.single('image') ,async(req,res)=>{
 
 // Route for Approving the BLogs
 routes.post('/approve-blog', (req, res)=>{
-  console.log(req.body);
+  console.log(req.body,'catehitttt');
   const id={
     mainid:req.body.mainid
   }
@@ -88,6 +136,9 @@ routes.post('/reject-blog', (req, res)=>{
     }));
 })
 
+/*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
+
+
 // Route for UnApproved Author Profile
 routes.post('/unapproved-author',async(req,res)=>{
   adderController.addUnApprovedAuthor(req.body)
@@ -103,36 +154,6 @@ routes.post('/unapproved-author',async(req,res)=>{
   }));
 })
 
-// Route for Login
-routes.post('/login',async(req,res)=>{
-  adderController.login(req.body)
-  .then(result=> {
-    // adderController.addAuthorToMain(result);
-    res.status(200).json({
-    status:"success",
-    msg:"Login Successfull",
-    result:result
-  })})
-  .catch(err =>res.status(200).json({
-    status:"error",
-    msg:err
-  }));
-})
-
-// This is to Verify the Email
-
-routes.get('/activate/:token', (req, res) => {
-  adderController.verifyMail(req.params)
-  .then(result =>{
-      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
-  })
-  .catch(err => {
-    res.status(400).json({
-      status:'error',
-      error:err
-    })
-  })
-})
 // Route for UnApproved Author Profile
 routes.post('/update-authorprofile', upload.single('author_image') ,async(req,res)=>{
   console.log(req.body);
@@ -204,6 +225,55 @@ routes.get('/single-author/:id', (req, res)=>{
     msg:"Author Profile",
     result:result
   })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
+
+/*<-------------------------------------------------######Other Routes for Authentication######--------------------------------------------------->*/
+
+
+// Route for Login
+routes.post('/login',async(req,res)=>{
+  adderController.login(req.body)
+  .then(result=> {
+    // adderController.addAuthorToMain(result);
+    res.status(200).json({
+    status:"success",
+    msg:"Login Successfull",
+    result:result
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    msg:err
+  }));
+})
+
+// This is to Verify the Email
+
+routes.get('/activate/:token', (req, res) => {
+  adderController.verifyMail(req.params)
+  .then(result =>{
+      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
+  })
+  .catch(err => {
+    res.status(400).json({
+      status:'error',
+      error:err
+    })
+  })
+})
+
+// Route for Deleteing Approved Blogs
+routes.post('/approvedblog', (req, res)=>{
+  deleteController.deleteApprovedBlog(req.body)
+  .then(result => res.status(200).json({
+    status:"success",
+    msg:"Approved Blog Deleted Successfully",
+    result:result
+  }))
   .catch(err =>res.status(200).json({
     status:"error",
     payload:err
