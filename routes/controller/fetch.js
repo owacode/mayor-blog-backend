@@ -85,6 +85,15 @@ class FetchController{
       })
     }
 
+    getCategoryApprovedBlogs(category){
+      return new Promise((resolve, reject)=> {
+        ApprovedBlog.find({sub_category:category})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
 
     getSingleApprovedBlogs(id){
       return new Promise((resolve, reject)=> {

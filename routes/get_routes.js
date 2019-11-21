@@ -48,6 +48,20 @@ routes.get('/approveblogs', (req, res)=>{
   }));
 })
 
+// Route for Getting All Approved Blogs
+routes.get('/category/:cat', (req, res)=>{
+  fetchController.getCategoryApprovedBlogs(req.params.cat)
+  .then(result => res.status(200).json({
+    status:"success",
+    msg:"Blog Fetch Successfully",
+    result:result
+  }))
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
+
 // Route for Getting All Not Approved Blogs
 routes.get('/notblogs', (req, res)=>{
   fetchController.getNotApprovedBlogs()
