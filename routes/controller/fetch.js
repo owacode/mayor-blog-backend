@@ -87,7 +87,7 @@ class FetchController{
 
     getCategoryApprovedBlogs(category){
       return new Promise((resolve, reject)=> {
-        ApprovedBlog.find({sub_category:category})
+        ApprovedBlog.find({sub_category:category}).sort({"date_added": -1})
         .then(result=> {
           resolve(result)})
         .catch(err=> reject(err));
