@@ -159,7 +159,7 @@ routes.post('/update-authorprofile', upload.single('author_image') ,async(req,re
   console.log(req.body);
   const result= await cloudinary.v2.uploader.upload(req.file.path)
   .catch(err =>{
-    new Promise(()=>{ throw new Error('exception!'); });
+    new Promise(()=>{ throw new Error('exception!');});
     console.log(err);
   })
   const imagepath= result.url;

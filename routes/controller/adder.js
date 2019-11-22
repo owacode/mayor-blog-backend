@@ -132,7 +132,7 @@ class AdderOperationController{
         approved_id:'null',
         unapproved_id:'null',
         author_id:values.authorid,
-        read_time:value.readtime,
+        read_time:values.readtime,
         rejected:false,
         status:'pending',
         title:values.title,
