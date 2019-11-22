@@ -9,6 +9,7 @@ const blog = mongoose.Schema({
   title:{type: String,required:true},
   category:{type: String,required:true},
   sub_category:{type: String,required:true},
+  read_time:{type: Number},
   date_added:{type: String},
   date_approved:{type: Date},
   author_id:{type:String, require:true},

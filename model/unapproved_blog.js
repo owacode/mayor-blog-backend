@@ -4,7 +4,7 @@ const blog = mongoose.Schema({
   title:{type: String,required:true},
   category:[],
   date_added:{type: Date},
-  // author_name:{type:String},
+  read_time:{type:Number},
   author_id:{type:String, required:true},
   desc:{type: String,required:true},
   main_id:{type:String},
