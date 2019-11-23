@@ -98,7 +98,7 @@ class AdderOperationController{
           title:result.title,
           category:value.category,
           sub_category:value.subcategory,
-          read_time:value.read_time,
+          read_time:result.read_time,
           date_added:result.date_added,
           date_approved:getTime(),
           author_id:result.author_id,
