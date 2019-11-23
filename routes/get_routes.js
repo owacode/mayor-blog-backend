@@ -21,8 +21,8 @@ routes.get('/video', (req, res)=>{
 })
 
 // Route for Getting Videos by Author
-routes.get('/singlevideo', (req, res)=>{
-  fetchController.getAuthorVideo(req.body.email)
+routes.get('/singlevideo/:email', (req, res)=>{
+  fetchController.getAuthorVideo(req.params.email)
   .then((result)=>res.status(200).json({
     status:"success",
     msg:"Single Video Fetch",
