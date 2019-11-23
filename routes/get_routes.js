@@ -39,7 +39,7 @@ routes.get('/singlevideo/:email', (req, res)=>{
 // Route for Getting Videos by Author
 routes.get('/video/:id', (req, res)=>{
   console.log('hit videoooo',req.params.id)
-  fetchController.getAuthorVideo(req.params.id)
+  fetchController.getSingleVideo(req.params.id)
   .then((result)=>res.status(200).json({
     status:"success",
     msg:"Single Video Fetch",
