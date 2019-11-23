@@ -60,7 +60,7 @@ class FetchController{
 
     getAuthorVideo(email){
       return new Promise((resolve, reject)=> {
-        AuthorVideo.find({email:email})
+        AuthorVideo.find({author_email:email})
         .then(result=> {
           resolve(result)})
         .catch(err=> reject(err));

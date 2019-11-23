@@ -8,6 +8,7 @@ const fetchController= require('./controller/fetch');
 
 // Route for Getting Videos
 routes.get('/video', (req, res)=>{
+   console.log('hit video')
   fetchController.getVideo()
   .then((result)=>res.status(200).json({
     status:"success",
@@ -22,6 +23,7 @@ routes.get('/video', (req, res)=>{
 
 // Route for Getting Videos by Author
 routes.get('/singlevideo/:email', (req, res)=>{
+  console.log('hit videoooo',req.params.email)
   fetchController.getAuthorVideo(req.params.email)
   .then((result)=>res.status(200).json({
     status:"success",
