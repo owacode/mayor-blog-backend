@@ -10,6 +10,20 @@ const deleteController= require('./controller/delete');
 const updateController= require('./controller/update');
 const fetchController= require('./controller/fetch');
 
+// Route for adding Videos by Author
+routes.post('/post-video', (req, res)=>{
+  adderController.addVideoByAuthor(req.body.id)
+  .then((result)=>res.status(200).json({
+    status:"success",
+    msg:"Blog Rejected"
+  }))
+    .catch(err =>res.status(200).json({
+      status:"error",
+      payload:err
+    }));
+})
+
+
 // This is for adding single image from editor
 routes.post('/addimage', upload.single('image') ,async(req,res)=>{
   console.log('hittttttttttttt',req.file);

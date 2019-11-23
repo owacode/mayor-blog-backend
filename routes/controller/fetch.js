@@ -7,6 +7,7 @@ const AllBlog= require('../../model/all_blog');
 const HomeBlog= require('../../model/homeblog');
 const AllAuthor= require('../../model/all_author');
 
+const AuthorVideo= require('../../model/author_video');
 class FetchController{
     // Fetching all Blogs from DB
     getApprovedBlogs(value){
@@ -48,7 +49,26 @@ class FetchController{
       })
     }
 
-    getHomeBlogs(){
+    getVideo(){
+      return new Promise((resolve, reject)=> {
+        AuthorVideo.find({})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
+    getAuthorVideo(email){
+      return new Promise((resolve, reject)=> {
+        AuthorVideo.find({email:email})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
+
+        getHomeBlogs(){
       return new Promise((resolve, reject)=> {
         HomeBlog.find({})
         .then(result=> {

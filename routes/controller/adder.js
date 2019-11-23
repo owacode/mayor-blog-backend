@@ -7,6 +7,8 @@ const AllBlog= require('../../model/all_blog');
 const HomeBlog= require('../../model/homeblog');
 const AllAuthor= require('../../model/all_author');
 
+const AuthorVideo= require('../../model/author_video');
+
 // Controllers
 const deleteController= require('./delete');
 const updateController= require('./update');
@@ -23,6 +25,25 @@ const transporter = nodemailer.createTransport({
 });
 let token;
 class AdderOperationController{
+
+  // Add Blog to Home The Home Page Blogs ( 3 Blogs )
+  addVideoByAuthor(value){
+    console.log('hitfefe',value)
+    return new Promise((resolve, reject)=>{
+          const video = new AuthorVideo({
+            author_email:value.title,
+            title:value.category,
+            date_added:getTime(),
+            desc:value.desc,
+            link:value.link
+          })
+         video.save()
+          .then((result)=>{
+            resolve(result);
+          })
+          .catch(err=> reject(err));
+    })
+  }
 
   // Add Blog to Home The Home Page Blogs ( 3 Blogs )
   addHomeBlog(value){
@@ -328,7 +349,7 @@ login(userdata){
       const token=jwt.sign({email:result[0].email,userid:result[0]._id},'%%%$$#book!*!(se!!ing^^&min%$#*)((//or'
       )
       console.log(result[0]._id, result[0].unapproved_id)
-      resolve({token:token, email:userdata.email, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id});
+      resolve({token:token, email:userdata.email, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id, name:result[0].name});
     })
   })
 }

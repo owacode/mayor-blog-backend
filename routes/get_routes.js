@@ -6,6 +6,34 @@ const deleteController= require('./controller/delete');
 const updateController= require('./controller/update');
 const fetchController= require('./controller/fetch');
 
+// Route for Getting Videos
+routes.get('/video', (req, res)=>{
+  fetchController.getVideo()
+  .then((result)=>res.status(200).json({
+    status:"success",
+    msg:"Video Fetch",
+    result:result
+  }))
+    .catch(err =>res.status(200).json({
+      status:"error",
+      payload:err
+    }));
+})
+
+// Route for Getting Videos by Author
+routes.get('/singlevideo', (req, res)=>{
+  fetchController.getAuthorVideo(req.body.email)
+  .then((result)=>res.status(200).json({
+    status:"success",
+    msg:"Single Video Fetch",
+    result:result
+  }))
+    .catch(err =>res.status(200).json({
+      status:"error",
+      payload:err
+    }));
+})
+
 // Route for Home Blogs
 routes.get('/homeblog', (req, res)=>{
   fetchController.getHomeBlogs(req.body)
