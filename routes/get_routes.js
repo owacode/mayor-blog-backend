@@ -36,6 +36,21 @@ routes.get('/singlevideo/:email', (req, res)=>{
     }));
 })
 
+// Route for Getting Videos by Author
+routes.get('/video/:id', (req, res)=>{
+  console.log('hit videoooo',req.params.id)
+  fetchController.getAuthorVideo(req.params.id)
+  .then((result)=>res.status(200).json({
+    status:"success",
+    msg:"Single Video Fetch",
+    result:result
+  }))
+    .catch(err =>res.status(200).json({
+      status:"error",
+      payload:err
+    }));
+})
+
 // Route for Home Blogs
 routes.get('/homeblog', (req, res)=>{
   fetchController.getHomeBlogs(req.body)

@@ -58,6 +58,15 @@ class FetchController{
       })
     }
 
+        getSingleVideo(id){
+      return new Promise((resolve, reject)=> {
+        AuthorVideo.find({_id:id})
+        .then(result=> {
+          resolve(result)})
+        .catch(err=> reject(err));
+      })
+    }
+
     getAuthorVideo(email){
       return new Promise((resolve, reject)=> {
         AuthorVideo.find({author_email:email})
