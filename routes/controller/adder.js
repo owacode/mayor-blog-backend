@@ -31,8 +31,8 @@ class AdderOperationController{
     console.log('hitfefe',value)
     return new Promise((resolve, reject)=>{
           const video = new AuthorVideo({
-            author_email:value.title,
-            title:value.category,
+            author_email:value.email,
+            title:value.title,
             date_added:getTime(),
             desc:value.desc,
             link:value.link

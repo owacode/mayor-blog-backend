@@ -12,7 +12,7 @@ const fetchController= require('./controller/fetch');
 
 // Route for adding Videos by Author
 routes.post('/post-video', (req, res)=>{
-  adderController.addVideoByAuthor(req.body.id)
+  adderController.addVideoByAuthor(req.body)
   .then((result)=>res.status(200).json({
     status:"success",
     msg:"Blog Rejected"
