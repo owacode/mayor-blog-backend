@@ -32,6 +32,7 @@ class AdderOperationController{
     return new Promise((resolve, reject)=>{
           const video = new AuthorVideo({
             author_email:value.email,
+            author_name:value.name,
             title:value.title,
             date_added:getTime(),
             desc:value.desc,
