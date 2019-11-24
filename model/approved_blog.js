@@ -13,6 +13,7 @@ const blog = mongoose.Schema({
   date_added:{type: String},
   date_approved:{type: Date},
   author_id:{type:String, require:true},
+  author_name:{type:String},
   main_id:{type:String, require:true},
   desc:{type: String,required:true},
   tags:[],

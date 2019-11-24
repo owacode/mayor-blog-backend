@@ -78,6 +78,7 @@ class AdderOperationController{
               category:value.category,
               date_added:getTime(),
               author_id:value.authorid,
+              author_name:value.authorname,
               read_time:value.readtime,
               desc:value.desc,
               image:value.imageurl,
@@ -100,6 +101,7 @@ class AdderOperationController{
                 blogid:result._id,
               }
               updateController.addUnapproveIdToMainBlog(id);
+              AdminMailForBlog(value);
               resolve(result);
             })
             .catch(err=> reject(err));
@@ -154,6 +156,7 @@ class AdderOperationController{
         approved_id:'null',
         unapproved_id:'null',
         author_id:values.authorid,
+        author_name:value.authorname,
         read_time:values.readtime,
         rejected:false,
         status:'pending',
@@ -439,6 +442,31 @@ function verifyUser(email){
       <p>Click on the link to Verify Your Account <a href="https://onewater-blog-api.herokuapp.com/activate/` +token+`">https://onewater-blog-api.herokuapp.com/activate/`+token+`
       </a>
       ` // html body
+    }
+
+    transporter.sendMail(sendingMail,(error,info)=>{
+      if(error){
+        console.log("Error Hit&&&&")
+          console.log('Nodemoalier Error%%%%%%%%%',error);
+      }
+      else{
+        console.log("Success Hit&&&&")
+          console.log("Email Sent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", info.response);
+      }
+  })
+}
+
+function AdminMailForBlog(values){
+  console.log(values,'author maillllllllllllllllll$$$')
+    let sendingMail = {
+      from:' "OneWater " <onewateracademy1@gmail.com> ',
+      to: 'Atharva.mungee@onewateracademy.org',
+      subject: "New Blog Added", // Subject line
+      text: "A new Author Profile has been added Please Check AdminPanel.",
+      html:`
+      <h4>Blog Added By ${values.authorname}<h4>
+      <h4>Title: ${values.title}<h4>
+      <p> A new Blog has been added Please Check AdminPanel. </p>` // html body
     }
 
     transporter.sendMail(sendingMail,(error,info)=>{
