@@ -2,14 +2,14 @@ const mongoose= require('mongoose');
 
 const author = mongoose.Schema({
   // Basic Info
-  name:{type: String,required:true},
-  about_author:{type: String,required:true},
-  location:{type: String,required:true},
+  name:{type: String},
+  about_author:{type: String},
+  location:{type: String},
   date_added:{type: Date},
   date_approved:{type: Date},
   interest_category:[],
-  image:{type: String,required:true},
-  email:{type: String,required:true, unique:true},
+  image:{type: String},
+  email:{type: String, unique:true},
   password:{type: String},
   salt:{type: String},
   token:{type: String},

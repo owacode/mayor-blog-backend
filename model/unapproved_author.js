@@ -2,7 +2,7 @@ const mongoose= require('mongoose');
 const validator=require('mongoose-unique-validator');
 
 const author = mongoose.Schema({
-  name:{type: String,required:true},
+  name:{type: String},
   about_author:{type: String},
   image:{type: String},
   date_added:{type: Date},

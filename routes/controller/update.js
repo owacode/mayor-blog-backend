@@ -95,6 +95,7 @@ class UpdateController{
     return new Promise((resolve,reject)=> {
                 NotApprovedAuthor.findByIdAndUpdate({_id:values.id},{
         $set:{
+          name:values.name,
           about_author:values.about_author,
           image:values.imageurl,
           location:values.location,
@@ -119,6 +120,7 @@ class UpdateController{
     console.log(values,'author iddddddd')
       AllAuthor.findByIdAndUpdate({_id:values.mainid},{
         $set:{
+          name:values.name,
           about_author:values.about_author,
           image:values.imageurl,
           interest_category:values.interest_category,
