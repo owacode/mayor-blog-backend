@@ -6,6 +6,7 @@ const blog = mongoose.Schema({
   date_added:{type: Date},
   read_time:{type:String},
   author_id:{type:String, required:true},
+  author_image:{type:String},
   author_name:{type:String},
   desc:{type: String,required:true},
   main_id:{type:String},

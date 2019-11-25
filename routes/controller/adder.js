@@ -78,6 +78,7 @@ class AdderOperationController{
               category:value.category,
               date_added:getTime(),
               author_id:value.authorid,
+              author_image:value.authorimage,
               author_name:value.authorname,
               read_time:value.readtime,
               desc:value.desc,
@@ -126,6 +127,7 @@ class AdderOperationController{
           date_added:result.date_added,
           date_approved:getTime(),
           author_id:result.author_id,
+          author_image:result.author_image,
           author_name:result.author_name,
           main_id:result.main_id,
           desc:result.desc,
@@ -158,6 +160,7 @@ class AdderOperationController{
         unapproved_id:'null',
         author_id:values.authorid,
         author_name:values.authorname,
+        author_image:values.authorimage,
         read_time:values.readtime,
         rejected:false,
         status:'pending',
@@ -354,7 +357,7 @@ login(userdata){
       const token=jwt.sign({email:result[0].email,userid:result[0]._id},'%%%$$#book!*!(se!!ing^^&min%$#*)((//or'
       )
       console.log(result[0]._id, result[0].unapproved_id)
-      resolve({token:token, email:userdata.email, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id, name:result[0].name});
+      resolve({token:token, email:userdata.email, image:result[0].image, form_filled:result[0].form_filled, mainid:result[0]._id, id:result[0].unapproved_id, approvedid:result[0].approved_id, name:result[0].name});
     })
   })
 }

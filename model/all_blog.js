@@ -4,6 +4,7 @@ const blog = mongoose.Schema({
   approved_id:{type:String},
   unapproved_id:{type:String},
   author_id:{type:String},
+  author_image:{type:String},
   author_name:{type:String},
   title:{type: String,required:true},
   category:[],
