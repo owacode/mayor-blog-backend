@@ -108,6 +108,34 @@ class UpdateController{
         }})
       .then(result => {
         console.log('Updated to NotApprovedAuthor');
+        AdminMail(values);
+        this.updateAuthorProfileMain(values);
+        resolve(result);
+      })
+      .catch(err =>console.log('error in updating approve',err));
+    })
+  }
+
+    // Update Profile of Author
+
+  updateAuthorApprovedProfile(values){
+    console.log(values,'author iddddddd ###')
+    return new Promise((resolve,reject)=> {
+                ApprovedAuthor.findByIdAndUpdate({_id:values.id},{
+        $set:{
+          name:values.name,
+          about_author:values.about_author,
+          image:values.imageurl,
+          location:values.location,
+          interest_category:values.interest_category,
+          linkedIn_id:values.linkedIn,
+          twitter_id:values.twitter,
+          facebook_id:values.facebook,
+          instagram_id:values.instagram,
+          form_filled:true
+        }})
+      .then(result => {
+        console.log('Updated to ApprovedAuthor');
         this.updateAuthorProfileMain(values);
         resolve(result);
       })
@@ -132,7 +160,7 @@ class UpdateController{
           form_filled:true
         }})
       .then(result => {console.log('Updated to AllAuthor')
-          AdminMail(values);
+          
     })
       .catch(err =>console.log('error in updating approve',err));
   }

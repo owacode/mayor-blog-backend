@@ -191,6 +191,21 @@ routes.post('/update-authorprofile', upload.single('author_image') ,async(req,re
   }));
 })
 
+// Route for UnApproved Author Profile
+routes.post('/update-approveprofile' ,(req,res)=>{
+  console.log(req.body);
+  updateController.updateAuthorApprovedProfile(req.body)
+  .then(result=> {
+    // adderController.addAuthorToMain(result);
+    res.status(200).json({
+    status:"success",
+    msg:"Profile is Updated"
+  })})
+  .catch(err =>res.status(200).json({
+    status:"error",
+    payload:err
+  }));
+})
 // Route for Approving Author Profile
 routes.post('/approve-author', (req, res)=>{
   const id={
