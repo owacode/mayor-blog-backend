@@ -158,6 +158,7 @@ class AdderOperationController{
           main_id:result.main_id,
           desc:result.desc,
           likes:[],
+          likecount:0,
           blog_no:0,
           tags:result.tags,
           image:result.image
