@@ -19,6 +19,7 @@ const blog = mongoose.Schema({
   desc:{type: String,required:true},
   tags:[],
   likes:[],
+  likecount:{type:Number},
   image:{type: String,required:true},
   blog_no:{type:Number}
 }).plugin(auoInCrease.mongoosePlugin, {

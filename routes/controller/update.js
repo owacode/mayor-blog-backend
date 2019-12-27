@@ -19,6 +19,20 @@ const transporter = nodemailer.createTransport({
 class UpdateController{
 
 
+  // Update Like on a Blog
+  updateLikeBlog(id){
+    console.log('hitfefe',value)
+    return new Promise((resolve, reject)=>{
+
+      ApprovedBlog.updateOne(
+      {_id:id},
+      {$inc: {'likecount': 1}})
+      .then(response=> {console.log('Like Incremented blog');})
+      .catch(err=> console.log(err));
+    })
+  }
+
+
   // Update Blog to Home The Home Page Blogs ( 3 Blogs )
   updateHomeBlog(value){
     console.log('hitfefe',value)
@@ -160,7 +174,7 @@ class UpdateController{
           form_filled:true
         }})
       .then(result => {console.log('Updated to AllAuthor')
-          
+
     })
       .catch(err =>console.log('error in updating approve',err));
   }

@@ -26,6 +26,31 @@ const transporter = nodemailer.createTransport({
 let token;
 class AdderOperationController{
 
+  // Like a Blog
+
+  likeTheBlog(values){
+    return new Promise((resolve, res)=> {
+        ApprovedBlog.findByIdAndUpdate({_id: values.blogid},{
+          $addToSet: {likes: values.userid}
+        })
+        .then(result=>{
+          console.log(result,'after like')
+          resolve(result);
+         } )
+        .catch(err=> reject(err));
+    })
+  }
+
+
+    // This methord is for adding the blogid to the author account (only for approved blogs)
+    addLikeBlogToUser(values){
+      ApprovedAuthor.findByIdAndUpdate({_id:values.blogid},{
+        $addToSet: {approved_blogs_added: values.blogid}
+      })
+      .then(result=>console.log("Adding blog to account Successfull",result))
+      .catch(err=> console.log("Adding blog to account Error", err));
+  }
+
   // Add Blog to Home The Home Page Blogs ( 3 Blogs )
   addVideoByAuthor(value){
     console.log('hitfefe',value)
@@ -83,7 +108,8 @@ class AdderOperationController{
               read_time:value.readtime,
               desc:value.desc,
               image:value.imageurl,
-              main_id:result._id
+              main_id:result._id,
+              likecount:0
             })
 
            return blog.save()
