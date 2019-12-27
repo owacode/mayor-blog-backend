@@ -21,10 +21,10 @@ class UpdateController{
 
   // Update Like on a Blog
   updateLikeBlog(id){
-    console.log('hitfefe',value)
+    console.log('hitfefe',id)
     return new Promise((resolve, reject)=>{
 
-      ApprovedBlog.updateOne(
+      ApprovedBlog.update(
       {_id:id},
       {$inc: {'likecount': 1}})
       .then(response=> {console.log('Like Incremented blog');})
