@@ -311,5 +311,19 @@ routes.get('/allauthor/:id', (req, res) => {
     }));
 })
 
+// Route for Getting Most Liked Blogs
+routes.get('/mostlikedblogs', (req, res) => {
+  fetchController.getMostLikedBlogs()
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Single All Author Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 
 module.exports = routes;

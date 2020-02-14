@@ -19,8 +19,8 @@ const nodemailer= require('nodemailer');
 const transporter = nodemailer.createTransport({
   service:'gmail',
   auth: {
-      user: 'onewateracademy1@gmail.com',
-      pass: 'onewater123'
+      user: 'bookseller797@gmail.com',
+      pass: '9617303525'
   }
 });
 let token;
@@ -50,8 +50,7 @@ class AdderOperationController{
       .then(result=>console.log("Adding blog to account Successfull",result))
       .catch(err=> console.log("Adding blog to account Error", err));
   }
-
-  // Add Blog to Home The Home Page Blogs ( 3 Blogs )
+  
   addVideoByAuthor(value){
     console.log('hitfefe',value)
     return new Promise((resolve, reject)=>{

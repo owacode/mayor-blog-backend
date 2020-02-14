@@ -266,6 +266,16 @@ class FetchController {
     })
   }
 
+    getMostLikedBlogs() {
+    return new Promise((resolve, reject) => {
+      ApprovedBlog.find().sort({ "likecount": -1 }).limit(5)
+        .then(result => {
+          resolve(result)
+        })
+        .catch(err => reject(err));
+    })
+  }
+
   //<<--------------------------------------------------------------------Video Posted By Author Ends--------------------------------------------------------------------->>
 }
 
