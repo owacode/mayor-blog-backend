@@ -280,6 +280,7 @@ class AdderOperationController{
       // First Deleting the Auhor Profile from UnApproved Collection
       deleteController.deleteUnapprovedAuthor(values.id)
       .then(result=> {
+        approveAuthorMail(result.email);
         console.log(result,'hit app author')
         const author= new ApprovedAuthor({
           name:result.name,
@@ -499,6 +500,25 @@ function AdminMailForBlog(values){
   })
 }
 
+approveAuthorMail(email){
+  console.log('$$$$$$$$$',email);
+    nodeoutlook.sendEmail({
+    auth: {
+        user: "OWACODE@onewateracademy.org",
+        pass: "Panda@21"
+    },
+      from:' "OneWater " <OWACODE@onewateracademy.org> ',
+      to: email,
+      subject: "Profile Approved✔", // Subject line
+      text: "Verify your Email for OneWater Instructor",
+      html:`
+      <h4> Congratulations Hello Welcome to OneWater Learning Academy<h4>
+      <p>Your Profile has been approved for Author. You can now Post Blogs. Login and Add Your Blog.
+      `, // html body
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i)
+});
+}
 //Like a comment of a particular Blog
 // likeComment(value){
 //   return new Promise((resolve, reject)=> {

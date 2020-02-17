@@ -7,17 +7,7 @@ const ApprovedBlog= require('../../model/approved_blog');
 const AllBlog= require('../../model/all_blog');
 const AllAuthor= require('../../model/all_author');
 const HomeBlog= require('../../model/homeblog');
-const nodemailer= require('nodemailer');
-//Transpoter for sending mails
-const transporter = nodemailer.createTransport({
-  service:'gmail',
-  auth: {
-      user: 'onewateracademy1@gmail.com',
-      pass: 'onewater123'
-  }
-});
 class UpdateController{
-
 
   // Update Like on a Blog
   updateLikeBlog(id){
@@ -194,7 +184,7 @@ class UpdateController{
   approveAuthor(values){
     console.log(values,'author iddddddd')
       AllAuthor.findByIdAndUpdate({_id:values.mainid},{$set:{approved_id:values.approveid, status:'approved'}})
-      .then(result => console.log('Updated to approved'))
+      .then(result => console.log('Updated to approved',result))
       .catch(err =>console.log('error in updating approve',err));
   }
 
@@ -225,29 +215,5 @@ function getTime(){
 
   // ISTTime now represents the time in IST coordinates
   return ISTTime;
-}
-
-function AdminMail(values){
-  console.log(values,'author maillllllllllllllllll$$$')
-    let sendingMail = {
-      from:' "OneWater " <onewateracademy1@gmail.com> ',
-      to: 'Atharva.mungee@onewateracademy.org',
-      subject: "New Author Added", // Subject line
-      text: "A new Author Profile has been added Please Check AdminPanel.",
-      html:`
-      <h4>Author Profile<h4>
-      <p> A new Author Profile with name <b> ${values.name} </b> and email ${values.email} has been added Please Check AdminPanel. </p>` // html body
-    }
-
-    transporter.sendMail(sendingMail,(error,info)=>{
-      if(error){
-        console.log("Error Hit&&&&")
-          console.log('Nodemoalier Error%%%%%%%%%',error);
-      }
-      else{
-        console.log("Success Hit&&&&")
-          console.log("Email Sent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", info.response);
-      }
-  })
 }
 module.exports= new UpdateController();
