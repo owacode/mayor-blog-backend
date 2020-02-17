@@ -162,7 +162,7 @@ class UpdateController{
           instagram_id:values.instagram,
           form_filled:true
         }})
-      .then(result => {console.log('Updated to AllAuthor')
+      .then(result => {console.log('Updated to AllAuthor');
 
     })
       .catch(err =>console.log('error in updating approve',err));
