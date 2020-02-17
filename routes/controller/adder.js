@@ -465,7 +465,7 @@ function verifyUser(email){
       from:' "OneWater " <OWACODE@onewateracademy.org> ',
       to: email,
       subject: "Verify Account✔", // Subject line
-      text: "Verify your Email for OneWater Instructor",
+      text: "Verify your Email for OneWater Author",
       html:`
       <h4>Hello Welcome to OneWater<h4>
       <p>Click on the link to Verify Your Account <a href="https://onewater-blog-api.herokuapp.com/activate/` +token+`">https://onewater-blog-api.herokuapp.com/activate/`+token+`
@@ -508,7 +508,7 @@ function approveAuthorMail(email){
       from:' "OneWater " <OWACODE@onewateracademy.org> ',
       to: email,
       subject: "Profile Approved✔", // Subject line
-      text: "Verify your Email for OneWater Instructor",
+      text: "Your Profile has been approved for Author",
       html:`
       <h4> Congratulations Hello Welcome to OneWater Learning Academy<h4>
       <p>Your Profile has been approved for Author. You can now Post Blogs. Login and Add Your Blog.
