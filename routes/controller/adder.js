@@ -519,36 +519,3 @@ approveAuthorMail(email){
     onSuccess: (i) => console.log(i)
 });
 }
-//Like a comment of a particular Blog
-// likeComment(value){
-//   return new Promise((resolve, reject)=> {
-//     Blog.update(
-//       { _id: value.id, "comments.userid":value.commentid},
-//       { $inc: { "comments.$.like": 1 } }
-//    )
-//    .then(result=> resolve(result));
-//   })
-// }
-
-// This methord is for adding a comment by User
-  //Comment on a Blog
-  // addComment(value){
-  //   return new Promise((resolve, reject)=> {
-  //     var today = new Date();
-  //     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-  //     const comment={
-  //       userid:value.userid,
-  //       username:value.username,
-  //       comment:value.comment,
-  //       dateadded:date,
-  //       like:0
-  //     }
-  //     Blog.update(
-  //       { _id: req.params.id},
-  //       { $addToSet: { comments: comment} }
-  //    )
-  //    .then(result=>resolve(result))
-  //    .catch(err=> reject(err));
-  //   })
-  // }
