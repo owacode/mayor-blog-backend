@@ -112,7 +112,6 @@ class UpdateController{
         }})
       .then(result => {
         console.log('Updated to NotApprovedAuthor');
-        // AdminMail(values);
         this.updateAuthorProfileMain(values);
         resolve(result);
       })
