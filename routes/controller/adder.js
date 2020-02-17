@@ -16,6 +16,10 @@ const crypto= require('crypto');
 const jwt = require('jsonwebtoken');
 const nodeoutlook = require('nodejs-nodemailer-outlook');
 
+const nodemailerAuthCredential = {
+        user: "OWACODE@onewateracademy.org",
+        pass: "Panda@21"
+}
 let token;
 class AdderOperationController{
 
@@ -457,10 +461,7 @@ return new Promise((resolve, reject)=> {
 function verifyUser(email){
   console.log('$$$$$$$$$',email,token);
     nodeoutlook.sendEmail({
-    auth: {
-        user: "OWACODE@onewateracademy.org",
-        pass: "Panda@21"
-    },
+    auth: nodemailerAuthCredential,
       from:' "OneWater " <OWACODE@onewateracademy.org> ',
       to: email,
       subject: "Verify Account✔", // Subject line
@@ -500,13 +501,10 @@ function AdminMailForBlog(values){
   })
 }
 
-approveAuthorMail(email){
+function approveAuthorMail(email){
   console.log('$$$$$$$$$',email);
     nodeoutlook.sendEmail({
-    auth: {
-        user: "OWACODE@onewateracademy.org",
-        pass: "Panda@21"
-    },
+    auth: nodemailerAuthCredential,
       from:' "OneWater " <OWACODE@onewateracademy.org> ',
       to: email,
       subject: "Profile Approved✔", // Subject line
