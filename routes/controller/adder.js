@@ -14,15 +14,8 @@ const deleteController= require('./delete');
 const updateController= require('./update');
 const crypto= require('crypto');
 const jwt = require('jsonwebtoken');
-const nodemailer= require('nodemailer');
-//Transpoter for sending mails
-const transporter = nodemailer.createTransport({
-  service:'gmail',
-  auth: {
-      user: 'bookseller797@gmail.com',
-      pass: '9617303525'
-  }
-});
+const nodeoutlook = require('nodejs-nodemailer-outlook');
+
 let token;
 class AdderOperationController{
 
@@ -462,28 +455,23 @@ return new Promise((resolve, reject)=> {
 
 function verifyUser(email){
   console.log('$$$$$$$$$',email,token);
-    let sendingMail = {
-      from:' "OneWater " <onewateracademy1@gmail.com> ',
+    nodeoutlook.sendEmail({
+    auth: {
+        user: "OWACODE@onewateracademy.org",
+        pass: "Panda@21"
+    },
+      from:' "OneWater " <OWACODE@onewateracademy.org> ',
       to: email,
       subject: "Verify Account✔", // Subject line
-      text: "Verify your Email to get started with Selling and Buying of Books",
+      text: "Verify your Email for OneWater Instructor",
       html:`
       <h4>Hello Welcome to OneWater<h4>
       <p>Click on the link to Verify Your Account <a href="https://onewater-blog-api.herokuapp.com/activate/` +token+`">https://onewater-blog-api.herokuapp.com/activate/`+token+`
       </a>
-      ` // html body
-    }
-
-    transporter.sendMail(sendingMail,(error,info)=>{
-      if(error){
-        console.log("Error Hit&&&&")
-          console.log('Nodemoalier Error%%%%%%%%%',error);
-      }
-      else{
-        console.log("Success Hit&&&&")
-          console.log("Email Sent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", info.response);
-      }
-  })
+      `, // html body
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i)
+});
 }
 
 function AdminMailForBlog(values){
