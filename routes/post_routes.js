@@ -9,7 +9,7 @@ const adderController = require('./controller/adder');
 const deleteController = require('./controller/delete');
 const updateController = require('./controller/update');
 const fetchController = require('./controller/fetch');
-// res.redirect(`http://localhost:4000/likeblog?userid=${values.userid}&blogid=${values.blogid}`
+
 // Like the Blog
 routes.post('/like', (req, res) => {
   console.log(req.body, 'test');
@@ -329,5 +329,35 @@ routes.post('/approvedblog', (req, res) => {
       status: "error",
       payload: err
     }));
+})
+
+routes.post('/reset-password', (req, res)=> {
+  console.log(req.body);
+  updateController.recoverPassword(req.body.email)
+  .then(result => res.json({
+    status: 'success',
+    msg: 'Check you email',
+    result: result
+  }))
+  .catch(err=> res.json({
+    status: 'error',
+    msg: 'Email not Exist',
+    error: err
+  }))
+})
+
+routes.post('/update-password',( req, res)=>{
+  console.log(req.body);
+  updateController.updatePassword(req.body)
+  .then(result => res.json({
+    status: 'success',
+    msg: 'Password Update Successfully',
+    result: result
+  }))
+  .catch(err=> res.json({
+    status: 'error',
+    msg: 'Error in Updating Password',
+    error: err
+  }))
 })
 module.exports = routes;
