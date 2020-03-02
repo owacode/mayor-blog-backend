@@ -60,6 +60,7 @@ class FetchController {
         .catch(err => reject(err));
     })
   }
+
   getSingleAllBlogs(id) {
     return new Promise((resolve, reject) => {
       AllBlog.find({ _id: id })
@@ -116,7 +117,19 @@ class FetchController {
 
   getSavedBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      SavedBlog.find({author_id:id})
+      SavedBlog.find({author_id:id}).sort({ "date_added": -1 })
+        .then(result => {
+          return resolve(result);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    })
+  }
+
+  getSingleSavedBlog(id) {
+    return new Promise((resolve, reject) => {
+      SavedBlog.findOne({_id:id})
         .then(result => {
           return resolve(result);
         })

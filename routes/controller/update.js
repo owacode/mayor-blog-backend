@@ -67,7 +67,7 @@ class UpdateController {
   }
 
   // Update Saved Blog
-  updateSavedWithImageBlog(values) {
+  updateSavedBlog(values) {
     console.log(values, 'update savedblog')
     return new Promise((resolve, reject) => {
       SavedBlog.findByIdAndUpdate({ _id: values.id }, {

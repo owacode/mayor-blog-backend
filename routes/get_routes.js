@@ -151,10 +151,26 @@ routes.get('/allblogs/:id', (req, res) => {
 
 // Route for Getting a saved blogs by author
 routes.get('/savedblogs/:id', (req, res) => {
+  console.log(req.params.id)
   fetchController.getSavedBlogsByAuthor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Saved Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting a saved blogs by author
+routes.get('/singlesavedblog/:id', (req, res) => {
+  console.log(req.params.id)
+  fetchController.getSingleSavedBlog(req.params.id)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Single Saved Blog Fetch Successfully",
       result: result
     }))
     .catch(err => res.status(200).json({
