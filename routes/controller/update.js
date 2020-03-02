@@ -3,6 +3,7 @@ const NotApprovedBlog = require('../../model/unapproved_blog');
 const NotApprovedAuthor = require('../../model/unapproved_author');
 const ApprovedAuthor = require('../../model/approved_author');
 const ApprovedBlog = require('../../model/approved_blog');
+const SavedBlog = require('../../model/savedblog');
 const AllBlog = require('../../model/all_blog');
 const AllAuthor = require('../../model/all_author');
 const HomeBlog = require('../../model/homeblog');
@@ -65,6 +66,49 @@ class UpdateController {
     })
   }
 
+  // Update Saved Blog
+  updateSavedWithImageBlog(values) {
+    console.log(values, 'update savedblog')
+    return new Promise((resolve, reject) => {
+      SavedBlog.findByIdAndUpdate({ _id: values.id }, {
+        $set: {
+          title: values.title,
+          desc: values.desc
+        }
+      })
+        .then(result => {
+          console.log('Saved Blog Updated');
+          return resolve(result);
+        })
+        .catch(err => {
+          console.log('error in Updated Saved Blog', err);
+          return reject(err);
+        });
+    })
+  }
+
+    // Update Saved Blog
+    updateSavedWithImageBlog(values) {
+      console.log(values, 'update savedblog')
+      return new Promise((resolve, reject) => {
+        SavedBlog.findByIdAndUpdate({ _id: values.id }, {
+          $set: {
+            title: values.title,
+            desc: values.desc,
+            image: values.imageurl
+          }
+        })
+          .then(result => {
+            console.log('Saved Blog Updated with Image');
+            return resolve(result);
+          })
+          .catch(err => {
+            console.log('error in Updated Saved Blog with Image', err);
+            return reject(err);
+          });
+      })
+    }
+
   // Approve a Blog
 
   approveBlog(values) {
@@ -75,9 +119,9 @@ class UpdateController {
   }
 
   // Delete a Approve Blog
-  deleteApproveBlog(values) {
-    console.log(values, 'blog iddddddd')
-    AllBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { status: 'deleted' } })
+  deleteApproveBlog(id) {
+    console.log('main del hit');
+    AllBlog.findByIdAndUpdate({ _id: id }, { $set: { status: 'deleted' } })
       .then(result => console.log('Updated to deleted'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -106,14 +150,11 @@ class UpdateController {
       NotApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
-          about_author: values.about_author,
+          bio: values.bio,
           image: values.imageurl,
           location: values.location,
-          interest_category: values.interest_category,
           linkedIn_id: values.linkedIn,
           twitter_id: values.twitter,
-          facebook_id: values.facebook,
-          instagram_id: values.instagram,
           form_filled: true
         }
       })
@@ -133,14 +174,11 @@ class UpdateController {
       ApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
-          about_author: values.about_author,
+          bio: values.bio,
           image: values.imageurl,
           location: values.location,
-          interest_category: values.interest_category,
           linkedIn_id: values.linkedIn,
           twitter_id: values.twitter,
-          facebook_id: values.facebook,
-          instagram_id: values.instagram,
           form_filled: true
         }
       })
@@ -159,14 +197,11 @@ class UpdateController {
     AllAuthor.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
         name: values.name,
-        about_author: values.about_author,
+        bio: values.bio,
         image: values.imageurl,
-        interest_category: values.interest_category,
         location: values.location,
         linkedIn_id: values.linkedIn,
         twitter_id: values.twitter,
-        facebook_id: values.facebook,
-        instagram_id: values.instagram,
         form_filled: true
       }
     })
@@ -206,33 +241,34 @@ class UpdateController {
 
   recoverPassword(email) {
     return new Promise((resolve, reject) => {
-      console.log('got email',email)
-      token = jwt.sign({ email: email,platform: 'blog_author' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
+      console.log('got email', email)
+      token = jwt.sign({ email: email, platform: 'blog_author' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
       console.log(token);
-      ApprovedAuthor.find({email: email})
-      .then(result=>{
-        console.log(result)
-        if(result.length == 0){
-          reject("Email Not Exist");
-        }else{
-          resetPasswordUserConfirmation(email);
-          return resolve("Reset Mail Send Successfully");
-        }
-      })
-  }) }
+      ApprovedAuthor.find({ email: email })
+        .then(result => {
+          console.log(result)
+          if (result.length == 0) {
+            reject("Email Not Exist");
+          } else {
+            resetPasswordUserConfirmation(email);
+            return resolve("Reset Mail Send Successfully");
+          }
+        })
+    })
+  }
 
   updatePassword(values) {
-    return new Promise ((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       console.log(values);
       saltHashPassword(values.password)
         .then(result => {
           console.log('hash !!!', result);
-          return AllAuthor.findOneAndUpdate({email:values.email}, {$set: { password: result.passwordHash, salt: result.salt}});
+          return AllAuthor.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
         })
-        .then(result=> {
+        .then(result => {
           return resolve(result);
         })
-        .catch(err=> {
+        .catch(err => {
           return reject(err);
         })
     })

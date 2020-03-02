@@ -3,11 +3,10 @@ const mongoose= require('mongoose');
 const author = mongoose.Schema({
   // Basic Info
   name:{type: String},
-  about_author:{type: String},
+  bio:{type: String},
   location:{type: String},
   date_added:{type: Date},
   date_approved:{type: Date},
-  interest_category:[],
   image:{type: String},
   email:{type: String, unique:true},
   password:{type: String},
@@ -17,15 +16,10 @@ const author = mongoose.Schema({
   main_id:{type:String},
   verified:{type:Boolean},
   form_filled:{type:Boolean},
-  // Followers and Following
-  followers:[],
-  following:[],
   // Social Accounts
   linkedIn_id:{type: String},
   email:{type: String},
-  instagram_id:{type: String},
   twitter_id:{type: String},
-  facebook_id:{type: String},
   // BLogs added by user
   // it will contain the id of the blogs
   approved_blogs_added:[],

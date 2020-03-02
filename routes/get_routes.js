@@ -135,7 +135,7 @@ routes.get('/allblogs', (req, res) => {
     }));
 })
 
-// Route for Getting a allBlogs
+// Route for Getting a AllBlogs
 routes.get('/allblogs/:id', (req, res) => {
   fetchController.getSingleAllBlogs(req.params.id)
     .then(result => res.status(200).json({
@@ -149,6 +149,19 @@ routes.get('/allblogs/:id', (req, res) => {
     }));
 })
 
+// Route for Getting a saved blogs by author
+routes.get('/savedblogs/:id', (req, res) => {
+  fetchController.getSavedBlogsByAuthor(req.params.id)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Saved Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
 
 // Route for Getting Single NOtApprovedBlog Authors
 routes.get('/singlenotappblog/:id', (req, res) => {

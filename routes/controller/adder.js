@@ -4,6 +4,7 @@ const NotApprovedAuthor = require('../../model/unapproved_author');
 const ApprovedAuthor = require('../../model/approved_author');
 const ApprovedBlog = require('../../model/approved_blog');
 const AllBlog = require('../../model/all_blog');
+const SavedBlog = require('../../model/savedblog');
 const HomeBlog = require('../../model/homeblog');
 const AllAuthor = require('../../model/all_author');
 const AuthorVideo = require('../../model/author_video');
@@ -14,12 +15,13 @@ const updateController = require('./update');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodeoutlook = require('nodejs-nodemailer-outlook');
-
 const nodemailerAuthCredential = {
   user: "OWACODE@onewateracademy.org",
   pass: "Panda@21"
 }
+
 let token;
+
 class AdderOperationController {
 
   // Like a Blog
@@ -172,6 +174,31 @@ class AdderOperationController {
   }
 
   //This is for adding the blog to collection where all the blogs are stored
+  addToSavedBlog(values) {
+    console.log('hit to saved blogs', values);
+    return new Promise((resolve, reject) => {
+      const blog = new SavedBlog({
+        author_id: values.authorid,
+        title: values.title,
+        date_added: getTime(),
+        desc: values.desc,
+        image: values.imageurl,
+        blog_no: 0
+      })
+
+      blog.save()
+        .then(result => {
+          console.log("Blog added to saved blog");
+          resolve(result);
+        })
+        .catch(err => {
+          console.log("Error in adding blog to saved blog", err);
+          reject(err);
+        })
+    })
+  }
+
+  //This is for adding the blog to collection where all the blogs are stored
   addBlogToMain(values) {
     console.log('hit all blogs', values);
     return new Promise((resolve, reject) => {
@@ -242,14 +269,11 @@ class AdderOperationController {
         .then(result => {
           const author = new NotApprovedAuthor({
             name: values.name,
-            about_author: 'null',
+            bio: 'null',
             image: 'null',
-            interest_category: 'null',
             linkedIn_id: 'null',
             twitter_id: 'null',
-            facebook_id: 'null',
             email: values.email,
-            instagram_id: 'null',
             date_added: getTime(),
             main_id: result._id,
             verified: false,
@@ -286,19 +310,14 @@ class AdderOperationController {
           console.log(result, 'hit app author')
           const author = new ApprovedAuthor({
             name: result.name,
-            about_author: result.about_author,
+            bio: result.bio,
             date_added: result.date_added,
             date_approved: getTime(),
             image: result.image,
             location: result.location,
-            followers: [],
-            following: [],
-            interest_category: result.interest_category,
             email: result.email,
             linkedIn_id: result.linkedIn_id,
-            instagram_id: result.instagram_id,
             twitter_id: result.twitter_id,
-            facebook_id: result.facebook_id,
             blogs_added: [],
             main_id: result.main_id,
             verified: result.verified,
@@ -330,17 +349,14 @@ class AdderOperationController {
           hashpass = result.passwordHash;
           const blog = new AllAuthor({
             approved_id: 'null',
-            about_author: 'null',
+            bio: 'null',
             rejected: false,
             status: 'pending',
             name: values.name,
-            interest_category: 'null',
             date_added: getTime(),
             linkedIn_id: 'null',
             twitter_id: 'null',
-            facebook_id: 'null',
             email: values.email,
-            instagram_id: 'null',
             image: 'null',
             verified: false,
             token: token,

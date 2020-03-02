@@ -7,34 +7,37 @@ const updateController= require('./update');
 class DeleteOperationController{
   // This methord is for deleting the unpproved blog
   // when we approved that blog
-  deleteUnapprovedBlog(id){
+  deleteUnapprovedBlog(values){
+    console.log('del hit');
     return new Promise((resolve, reject)=> {
-    NotApprovedBlog.findByIdAndDelete({_id:id})
+    updateController.deleteApproveBlog(values.mainid);
+    
+    NotApprovedBlog.findByIdAndDelete({_id:values.unapproveid})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
-      resolve(result);
+      return resolve(result);
     })
     .catch(err =>{
       console.log("Error in Deleting Blog", err);
-      reject(err);
+      return reject(err);
     })
     });
 }
 
-  // This methord is for deleting the pproved blog by author
+  // This methord is for deleting the approved blog by author
   deleteApprovedBlog(values){
     return new Promise((resolve, reject)=> {
 
-    updateController.deleteApproveBlog(values);
+    updateController.deleteApproveBlog(values.mainid);
     
-    ApprovedBlog.findByIdAndDelete({_id:values.id})
+    ApprovedBlog.findByIdAndDelete({_id:values.approveid})
     .then(result =>{
       console.log("Blog deleted from Approved",result);
-      resolve(result);
+      return resolve(result);
     })
     .catch(err =>{
       console.log("Error in Deleting Blog", err);
-      reject(err);
+      return reject(err);
     })
     });
 }

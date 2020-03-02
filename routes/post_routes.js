@@ -109,8 +109,7 @@ routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
       new Promise(() => { throw new Error('exception!'); });
       console.log(err);
     })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
+  req.body.imageurl = result.url;
   adderController.addNewBlogToUnApproved(req.body)
     .then(result => {
       // adderController.addBlogToMain(result);
@@ -148,17 +147,91 @@ routes.post('/approve-blog', (req, res) => {
     }));
 })
 
-// Route for Rejecting the BLogs
-routes.post('/reject-blog', (req, res) => {
-  deleteController.deleteUnapprovedBlog(req.body.id)
-    .then(result => {
-      {
-        return updateController.rejectBlog(req.body);
-      }
+// Route for Saved Blogs
+routes.post('/save-blog', upload.single('image'), async (req, res) => {
+  console.log(req.body, 'catehitttt');
+    const result = await cloudinary.v2.uploader.upload(req.file.path)
+    .catch((err) => {
+      new Promise(() => { throw new Error('exception!'); });
+      console.log(err);
     })
+  req.body.imageurl = result.url;
+  adderController.addToSavedBlog(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Blog is added to saved blog",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Saved Blogs
+routes.patch('/updateimage-saved-blog', upload.single('image'), async (req, res) => {
+  console.log(req.body, 'updated saved hit');
+    const result = await cloudinary.v2.uploader.upload(req.file.path)
+    .catch((err) => {
+      new Promise(() => { throw new Error('exception!'); });
+      console.log(err);
+    })
+  req.body.imageurl = result.url;
+  updateController.updateSavedWithImageBlog(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Saved Blog Updated",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Saved Blogs
+routes.patch('/update-saved-blog', (req, res) => {
+  console.log(req.body, 'updated saved hit');
+  updateController.updateSavedBlog(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Saved Blog Updated",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Deleteing Approved Blogs
+routes.post('/deleteapproveblog', (req, res) => {
+  console.log(req.body);
+  deleteController.deleteApprovedBlog(req.body)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Approved Blog Deleted Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Deleteing the UnApproved BLogs
+routes.post('/deleteunapproveblog', (req, res) => {
+  console.log(req.body);
+  deleteController.deleteUnapprovedBlog(req.body)
     .then((result) => res.status(200).json({
       status: "success",
-      msg: "Blog Rejected"
+      msg: "UnApproved Blog Deleted Successfully"
     }))
     .catch(err => res.status(200).json({
       status: "error",
@@ -186,15 +259,15 @@ routes.post('/unapproved-author', async (req, res) => {
 })
 
 // Route for UnApproved Author Profile
-routes.post('/update-authorprofile', upload.single('author_image'), async (req, res) => {
+routes.post('/update-authorprofile', upload.single('image'), async (req, res) => {
   console.log(req.body);
   const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch(err => {
+    .catch((err) => {
       new Promise(() => { throw new Error('exception!'); });
       console.log(err);
     })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
+  req.body.imageurl = result.url;
+  console.log(res.body);
   updateController.updateAuthorProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
@@ -315,20 +388,6 @@ routes.get('/activate/:token', (req, res) => {
         error: err
       })
     })
-})
-
-// Route for Deleteing Approved Blogs
-routes.post('/approvedblog', (req, res) => {
-  deleteController.deleteApprovedBlog(req.body)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Approved Blog Deleted Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
 })
 
 routes.post('/reset-password', (req, res)=> {

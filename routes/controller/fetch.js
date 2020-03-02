@@ -4,6 +4,7 @@ const NotApprovedAuthor = require('../../model/unapproved_author');
 const ApprovedAuthor = require('../../model/approved_author');
 const ApprovedBlog = require('../../model/approved_blog');
 const AllBlog = require('../../model/all_blog');
+const SavedBlog = require('../../model/savedblog');
 const HomeBlog = require('../../model/homeblog');
 const AllAuthor = require('../../model/all_author');
 
@@ -110,6 +111,18 @@ class FetchController {
         .catch(err => {
           reject(err);
         })
+    })
+  }
+
+  getSavedBlogsByAuthor(id) {
+    return new Promise((resolve, reject) => {
+      SavedBlog.find({author_id:id})
+        .then(result => {
+          return resolve(result);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     })
   }
 
