@@ -482,7 +482,7 @@ function verifyUser(email) {
     text: "Verify your Email for OneWater Author",
     html: `
       <h4>Hello Welcome to OneWater<h4>
-      <p>Click on the link to Verify Your Account <a href="https://onewater-blog-api.herokuapp.com/activate/` + token + `">https://onewater-blog-api.herokuapp.com/activate/` + token + `
+      <p>Click on the link to Verify Your Account <a href="https://onewater-blogapi.herokuapp.com/activate/` + token + `">https://onewater-blog-api.herokuapp.com/activate/` + token + `
       </a>
       `, // html body
     onError: (e) => console.log(e),
