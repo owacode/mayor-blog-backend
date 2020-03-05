@@ -137,7 +137,7 @@ class AdderOperationController {
     return new Promise((resolve, reject) => {
 
       // First Deleting the unapproved blog from the collection
-      deleteController.deleteUnapprovedBlog(value.id)
+      deleteController.deleteUnapprovedBlog(value.unapproveid)
         .then(result => {
           // console.log("not approved blog", result);
           const blog = new ApprovedBlog({

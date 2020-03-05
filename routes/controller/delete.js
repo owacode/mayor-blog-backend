@@ -7,12 +7,12 @@ const updateController= require('./update');
 class DeleteOperationController{
   // This methord is for deleting the unpproved blog
   // when we approved that blog
-  deleteUnapprovedBlog(values){
+  deleteUnapprovedBlog(id){
     console.log('del hit');
     return new Promise((resolve, reject)=> {
-    updateController.deleteApproveBlog(values.mainid);
+    // updateController.deleteApproveBlog(values.mainid);
     
-    NotApprovedBlog.findByIdAndDelete({_id:values.unapproveid})
+    NotApprovedBlog.findByIdAndDelete({_id:id})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
       return resolve(result);
