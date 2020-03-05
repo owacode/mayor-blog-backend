@@ -125,6 +125,49 @@ routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
     }));
 })
 
+// Route for UnApproved BLogs
+routes.post('/saved-unapproved-blog-with-image', upload.single('image'), async (req, res) => {
+  console.log(req.body);
+  const result = await cloudinary.v2.uploader.upload(req.file.path)
+    .catch((err) => {
+      new Promise(() => { throw new Error('exception!'); });
+      console.log(err);
+    })
+  req.body.imageurl = result.url;
+  deleteController.deleteSavedBlog(req.body.savedid);
+  adderController.addNewBlogToUnApproved(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Blog is send for verification you will be respond back in 24 hours",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for UnApproved BLogs from saved without image upload
+routes.post('/saved-unapproved-blog', (req, res) => {
+  console.log(req.body);
+  req.body.imageurl = req.body.image;
+  deleteController.deleteSavedBlog(req.body.savedid);
+  adderController.addNewBlogToUnApproved(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Blog is send for verification you will be respond back in 24 hours",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Approving the BLogs
 routes.post('/approve-blog', (req, res) => {
   console.log(req.body, 'catehitttt');
@@ -228,7 +271,7 @@ routes.post('/deleteapproveblog', (req, res) => {
 // Route for Deleteing the UnApproved BLogs
 routes.post('/deleteunapproveblog', (req, res) => {
   console.log(req.body);
-  deleteController.deleteUnapprovedBlog(req.body)
+  deleteController.deleteAuthorUnapprovedBlog(req.body)
     .then((result) => res.status(200).json({
       status: "success",
       msg: "UnApproved Blog Deleted Successfully"
