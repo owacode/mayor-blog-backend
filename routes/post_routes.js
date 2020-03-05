@@ -326,6 +326,29 @@ routes.post('/update-authorprofile', upload.single('image'), async (req, res) =>
 })
 
 // Route for UnApproved Author Profile
+routes.post('/update-approveprofile-with-image',upload.single('imageurl'), async (req, res) => {
+  console.log(req.body);
+    const result = await cloudinary.v2.uploader.upload(req.file.path)
+    .catch((err) => {
+      new Promise(() => { throw new Error('exception!'); });
+      console.log(err);
+    })
+  req.body.imageurl = result.url;
+  updateController.updateAuthorApprovedProfile(req.body)
+    .then(result => {
+      // adderController.addAuthorToMain(result);
+      res.status(200).json({
+        status: "success",
+        msg: "Profile is Updated"
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for UnApproved Author Profile
 routes.post('/update-approveprofile', (req, res) => {
   console.log(req.body);
   updateController.updateAuthorApprovedProfile(req.body)

@@ -175,7 +175,7 @@ class UpdateController {
         $set: {
           name: values.name,
           bio: values.bio,
-          image: values.imageurl,
+          image:values.imageurl,
           location: values.location,
           linkedIn_id: values.linkedIn,
           twitter_id: values.twitter,
@@ -185,9 +185,12 @@ class UpdateController {
         .then(result => {
           console.log('Updated to ApprovedAuthor');
           this.updateAuthorProfileMain(values);
-          resolve(result);
+          return resolve(result);
         })
-        .catch(err => console.log('error in updating approve', err));
+        .catch(err => {
+          console.log('error in updating approve', err)
+          return reject(err);
+        });
     })
   }
 
