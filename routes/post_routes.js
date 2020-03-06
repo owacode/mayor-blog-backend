@@ -37,7 +37,6 @@ routes.post('/post-video', (req, res) => {
     }));
 })
 
-
 // This is for adding single image from editor
 routes.post('/addimage', upload.single('image'), async (req, res) => {
   console.log('hittttttttttttt', req.file);
@@ -52,30 +51,6 @@ routes.post('/addimage', upload.single('image'), async (req, res) => {
     imagepath: imagepath,
     msg: "Image Added successfully"
   })
-})
-
-// Route for Blog to Home The Home Page Blogs ( 3 Blogs )
-routes.post('/homeblog', upload.single('image'), async (req, res) => {
-  console.log(req.body);
-  const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch((err) => {
-      new Promise(() => { throw new Error('exception!'); });
-      console.log(err);
-    })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
-  adderController.addHomeBlog(req.body)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Blog is added for HomePage",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
 })
 
 //Update  Route for Blog to Home The Home Page Blogs ( 3 Blogs )
@@ -286,8 +261,8 @@ routes.post('/deleteunapproveblog', (req, res) => {
 
 
 // Route for UnApproved Author Profile
-routes.post('/unapproved-author', async (req, res) => {
-  adderController.addUnApprovedAuthor(req.body)
+routes.post('/unapproved-mayor', async (req, res) => {
+  adderController.addUnApprovedMayor(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -302,7 +277,7 @@ routes.post('/unapproved-author', async (req, res) => {
 })
 
 // Route for UnApproved Author Profile
-routes.post('/update-authorprofile', upload.single('image'), async (req, res) => {
+routes.post('/update-mayorprofile', upload.single('image'), async (req, res) => {
   console.log(req.body);
   const result = await cloudinary.v2.uploader.upload(req.file.path)
     .catch((err) => {
@@ -311,7 +286,7 @@ routes.post('/update-authorprofile', upload.single('image'), async (req, res) =>
     })
   req.body.imageurl = result.url;
   console.log(res.body);
-  updateController.updateAuthorProfile(req.body)
+  updateController.updateMayorProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -365,11 +340,11 @@ routes.post('/update-approveprofile', (req, res) => {
     }));
 })
 // Route for Approving Author Profile
-routes.post('/approve-author', (req, res) => {
+routes.post('/approve-mayor', (req, res) => {
   const id = {
     mainid: req.body.mainid
   }
-  adderController.addApprovedAuthor(req.body)
+  adderController.addApprovedMayor(req.body)
     .then(result => {
       console.log(result._id, 'idddddddd');
       id.approveid = result._id;
@@ -388,9 +363,9 @@ routes.post('/approve-author', (req, res) => {
 })
 
 // Route for Rejecting the Author Profile
-routes.post('/reject-author', (req, res) => {
+routes.post('/reject-mayor', (req, res) => {
   console.log(req.body, 'body');
-  deleteController.deleteUnapprovedAuthor(req.body.id)
+  deleteController.deleteUnApprovedMayor(req.body.id)
     .then(result => {
       updateController.rejectAuthorProfile(req.body)
       res.status(200).json({
@@ -406,7 +381,7 @@ routes.post('/reject-author', (req, res) => {
 
 // Route for Getting Details of Author Profile
 routes.get('/single-author/:id', (req, res) => {
-  fetchController.getSingleApprovedAuthor(req.params.id)
+  fetchController.getSingleApprovedMayor(req.params.id)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -442,7 +417,6 @@ routes.post('/login', async (req, res) => {
 })
 
 // This is to Verify the Email
-
 routes.get('/activate/:token', (req, res) => {
   adderController.verifyMail(req.params)
     .then(result => {

@@ -1,12 +1,11 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedAuthor = require('../../model/unapproved_author');
-const ApprovedAuthor = require('../../model/approved_author');
+const NotApprovedMayor = require('../../model/unapproved_mayor');
+const ApprovedMayor = require('../../model/approved_mayor');
 const ApprovedBlog = require('../../model/approved_blog');
 const AllBlog = require('../../model/all_blog');
 const SavedBlog = require('../../model/savedblog');
-const HomeBlog = require('../../model/homeblog');
-const AllAuthor = require('../../model/all_author');
+const AllMayor = require('../../model/all_mayor');
 const AuthorVideo = require('../../model/author_video');
 
 // Controllers
@@ -40,7 +39,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the author account (only for approved blogs)
   addLikeBlogToUser(values) {
-    ApprovedAuthor.findByIdAndUpdate({ _id: values.blogid }, {
+    ApprovedMayor.findByIdAndUpdate({ _id: values.blogid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -59,25 +58,6 @@ class AdderOperationController {
         link: value.link
       })
       video.save()
-        .then((result) => {
-          resolve(result);
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  // Add Blog to Home The Home Page Blogs ( 3 Blogs )
-  addHomeBlog(value) {
-    console.log('hitfefe', value)
-    return new Promise((resolve, reject) => {
-      const blog = new HomeBlog({
-        title: value.title,
-        category: value.category,
-        date_added: getTime(),
-        desc: value.desc,
-        image: value.imageurl
-      })
-      blog.save()
         .then((result) => {
           resolve(result);
         })
@@ -232,7 +212,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the author account (only for approved blogs)
   addApprovedBlogToUser(values) {
-    ApprovedAuthor.findByIdAndUpdate({ _id: values.authorid }, {
+    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -241,7 +221,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the author account (for unapproved and all blogs)
   addUnapprovedBlogToUser(values) {
-    ApprovedAuthor.findByIdAndUpdate({ _id: values.authorid }, {
+    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, {
       $addToSet: { unapproved_blogs_added: values.blogid, all_blogs_added: values.mainid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -252,22 +232,20 @@ class AdderOperationController {
     const like = {
       blogid: values.blogid
     }
-    ApprovedAuthor.findByIdAndUpdate({ _id: values.authorid }, { $addToSet: { liked_blog: like } })
+    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, { $addToSet: { liked_blog: like } })
       .then(result => console.log("Blog liked added to user"))
       .catch(err => console.log("Error in Adding Blog to liked"))
   }
 
   // This is for adding the new author
   // initially author will we unapproved
-  addUnApprovedAuthor(values) {
+  addUnApprovedMayor(values) {
     console.log(values);
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
-    let salt;
-    let hashpass;
     return new Promise((resolve, reject) => {
-      this.addAuthorToMain(values)
+      this.addMayorToMain(values)
         .then(result => {
-          const author = new NotApprovedAuthor({
+          const author = new NotApprovedMayor({
             name: values.name,
             bio: 'null',
             image: 'null',
@@ -300,15 +278,15 @@ class AdderOperationController {
 
   // This is for approving the Author
   // to post the blog by approving his profile
-  addApprovedAuthor(values) {
+  addApprovedMayor(values) {
     console.log("approve hit")
     return new Promise((resolve, reject) => {
       // First Deleting the Auhor Profile from UnApproved Collection
-      deleteController.deleteUnapprovedAuthor(values.id)
+      deleteController.deleteUnApprovedMayor(values.id)
         .then(result => {
           approveAuthorMail(result.email);
           console.log(result, 'hit app author')
-          const author = new ApprovedAuthor({
+          const author = new ApprovedMayor({
             name: result.name,
             bio: result.bio,
             date_added: result.date_added,
@@ -338,16 +316,12 @@ class AdderOperationController {
   }
 
   //This is for adding the Author to collection where all the Authors are stored
-  addAuthorToMain(values) {
+  addMayorToMain(values) {
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
-    let salt;
-    let hashpass;
     return new Promise((resolve, reject) => {
       saltHashPassword(values.password)
         .then(result => {
-          salt = result.salt;
-          hashpass = result.passwordHash;
-          const blog = new AllAuthor({
+          const mayor = new AllMayor({
             approved_id: 'null',
             bio: 'null',
             rejected: false,
@@ -361,18 +335,18 @@ class AdderOperationController {
             verified: false,
             token: token,
             form_filled: false,
-            salt: salt,
-            password: hashpass,
+            salt: result.salt,
+            password: result.passwordHash,
           })
-          return blog.save();
+          return mayor.save();
         })
         .then(result => {
-          console.log("Author added to allAuthor")
-          resolve(result);
+          console.log("Author added to AllMayor")
+          return resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding Author to allAuthor", err);
-          reject(err);
+          console.log("Error in adding Author to AllMayor", err);
+          return reject(err);
         })
     })
   }
@@ -381,7 +355,7 @@ class AdderOperationController {
   login(userdata) {
     return new Promise((resolve, reject) => {
       console.log(userdata);
-      AllAuthor.find({ email: userdata.email })
+      AllMayor.find({ email: userdata.email })
         .then(result => {
           console.log('%%%%%%%', result)
           if (result.length == 0) {
@@ -402,7 +376,7 @@ class AdderOperationController {
 
   verifyMail(values) {
     return new Promise((resolve, reject) => {
-      AllAuthor.find({ token: values.token })
+      AllMayor.find({ token: values.token })
         .then(result => {
           if (!result) {
             return reject("Invalid Token");
@@ -410,7 +384,7 @@ class AdderOperationController {
           const verification_result = jwt.verify(values.token, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
           const user = verification_result.email;
           console.log(user);
-          AllAuthor.findOneAndUpdate({ email: user }, { $set: { verified: true } })
+          AllMayor.findOneAndUpdate({ email: user }, { $set: { verified: true } })
             .then(result => {
               console.log(result, 'User Verified');
               return resolve(result);
@@ -479,10 +453,10 @@ function verifyUser(email) {
     from: ' "OneWater " <OWACODE@onewateracademy.org> ',
     to: email,
     subject: "Verify Account✔", // Subject line
-    text: "Verify your Email for OneWater Author",
+    text: "Verify your Email for OneWater Mayor",
     html: `
       <h4>Hello Welcome to OneWater<h4>
-      <p>Click on the link to Verify Your Account <a href="https://onewater-blogapi.herokuapp.com/activate/` + token + `">https://onewater-blog-api.herokuapp.com/activate/` + token + `
+      <p>Click on the link to Verify Your Account <a href="https://onewater-mayor.herokuapp.com/activate/` + token + `">http://localhost:3000/activate/` + token + `
       </a>
       `, // html body
     onError: (e) => console.log(e),

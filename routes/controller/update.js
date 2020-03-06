@@ -1,11 +1,11 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedAuthor = require('../../model/unapproved_author');
-const ApprovedAuthor = require('../../model/approved_author');
+const NotApprovedMayor = require('../../model/unapproved_mayor');
+const ApprovedMayor = require('../../model/approved_mayor');
 const ApprovedBlog = require('../../model/approved_blog');
 const SavedBlog = require('../../model/savedblog');
 const AllBlog = require('../../model/all_blog');
-const AllAuthor = require('../../model/all_author');
+const AllMayor = require('../../model/all_mayor');
 const HomeBlog = require('../../model/homeblog');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -144,10 +144,10 @@ class UpdateController {
   }
 
   // Update Profile of Author
-  updateAuthorProfile(values) {
+  updateMayorProfile(values) {
     console.log(values, 'author iddddddd')
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
+      NotApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
           bio: values.bio,
@@ -159,8 +159,8 @@ class UpdateController {
         }
       })
         .then(result => {
-          console.log('Updated to NotApprovedAuthor');
-          this.updateAuthorProfileMain(values);
+          console.log('Updated to NotApprovedMayor');
+          this.updateMayorProfileMain(values);
           resolve(result);
         })
         .catch(err => console.log('error in updating approve', err));
@@ -171,7 +171,7 @@ class UpdateController {
   updateAuthorApprovedProfile(values) {
     console.log(values, 'author iddddddd ###')
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
+      ApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
           bio: values.bio,
@@ -183,8 +183,8 @@ class UpdateController {
         }
       })
         .then(result => {
-          console.log('Updated to ApprovedAuthor');
-          this.updateAuthorProfileMain(values);
+          console.log('Updated to ApprovedMayor');
+          this.updateMayorProfileMain(values);
           return resolve(result);
         })
         .catch(err => {
@@ -195,9 +195,9 @@ class UpdateController {
   }
 
   // Update Profile of Author TO Main Collection
-  updateAuthorProfileMain(values) {
+  updateMayorProfileMain(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, {
+    AllMayor.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
         name: values.name,
         bio: values.bio,
@@ -209,7 +209,7 @@ class UpdateController {
       }
     })
       .then(result => {
-        console.log('Updated to AllAuthor');
+        console.log('Updated to AllMayor');
 
       })
       .catch(err => console.log('error in updating approve', err));
@@ -219,7 +219,7 @@ class UpdateController {
 
   addunapproveidtoauthor(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
+    AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -227,7 +227,7 @@ class UpdateController {
   // Approve a Author
   approveAuthor(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
+    AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved', result))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -236,7 +236,7 @@ class UpdateController {
   rejectAuthorProfile(values) {
     console.log(values, 'mohit hit')
     return new Promise((resolve, reject) => {
-      AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
+      AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
@@ -247,7 +247,7 @@ class UpdateController {
       console.log('got email', email)
       token = jwt.sign({ email: email, platform: 'blog_author' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
       console.log(token);
-      ApprovedAuthor.find({ email: email })
+      ApprovedMayor.find({ email: email })
         .then(result => {
           console.log(result)
           if (result.length == 0) {
@@ -266,7 +266,7 @@ class UpdateController {
       saltHashPassword(values.password)
         .then(result => {
           console.log('hash !!!', result);
-          return AllAuthor.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
+          return AllMayor.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
         })
         .then(result => {
           return resolve(result);

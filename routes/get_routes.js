@@ -258,7 +258,7 @@ routes.get('/authorallblogs/:id', (req, res) => {
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
 // Route for Getting All Not Approved Authors
 routes.get('/notauthor', (req, res) => {
-  fetchController.getNotApprovedAuthor()
+  fetchController.getNotApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
       msg: "NotApproved Author Fetch Successfully",
@@ -272,7 +272,7 @@ routes.get('/notauthor', (req, res) => {
 
 // Route for Getting Single Not Approved Author
 routes.get('/notauthor/:id', (req, res) => {
-  fetchController.getSingleNotApprovedAuthor(req.params.id)
+  fetchController.getSingleNotApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single NotApproved Author Fetch Successfully",
@@ -285,8 +285,8 @@ routes.get('/notauthor/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/approvedauthor', (req, res) => {
-  fetchController.getApprovedAuthor()
+routes.get('/ApprovedMayor', (req, res) => {
+  fetchController.getApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
       msg: "Approved Author Fetch Successfully",
@@ -299,8 +299,8 @@ routes.get('/approvedauthor', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/approvedauthor/:id', (req, res) => {
-  fetchController.getSingleApprovedAuthor(req.params.id)
+routes.get('/ApprovedMayor/:id', (req, res) => {
+  fetchController.getSingleApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Approved Author Fetch Successfully",
@@ -313,8 +313,8 @@ routes.get('/approvedauthor/:id', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/allauthor', (req, res) => {
-  fetchController.getAllAuthor()
+routes.get('/AllMayor', (req, res) => {
+  fetchController.getAllMayor()
     .then(result => res.status(200).json({
       status: "success",
       msg: "All Author Fetch Successfully",
@@ -327,8 +327,8 @@ routes.get('/allauthor', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/allauthor/:id', (req, res) => {
-  fetchController.getSingleAllAuthor(req.params.id)
+routes.get('/AllMayor/:id', (req, res) => {
+  fetchController.getSingleAllMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single All Author Fetch Successfully",

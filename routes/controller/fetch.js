@@ -1,12 +1,12 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedAuthor = require('../../model/unapproved_author');
-const ApprovedAuthor = require('../../model/approved_author');
+const NotApprovedMayor = require('../../model/unapproved_mayor');
+const ApprovedMayor = require('../../model/approved_mayor');
 const ApprovedBlog = require('../../model/approved_blog');
 const AllBlog = require('../../model/all_blog');
 const SavedBlog = require('../../model/savedblog');
 const HomeBlog = require('../../model/homeblog');
-const AllAuthor = require('../../model/all_author');
+const AllMayor = require('../../model/all_mayor');
 
 const AuthorVideo = require('../../model/author_video');
 class FetchController {
@@ -141,7 +141,7 @@ class FetchController {
 
   getApprovedBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedMayor({ _id: id })
         .then(result => {
           let blogs_id = result[0].approved_blogs_added;
           return ApprovedBlog.find({ _id: { $in: blogs_id } })
@@ -155,7 +155,7 @@ class FetchController {
 
   getUnapprovedBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedMayor({ _id: id })
         .then(result => {
           let blogs_id = result[0].unapproved_blogs_added;
           return NotApprovedBlog.find({ _id: { $in: blogs_id } })
@@ -169,7 +169,7 @@ class FetchController {
 
   getAllBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedMayor({ _id: id })
         .then(result => {
           let blogs_id = result[0].all_blogs_added;
           console.log(blogs_id);
@@ -194,9 +194,9 @@ class FetchController {
   }
 
   /* <!------------------------------------------------------**********BLOG END***********-------------------------------------------!> */
-  getNotApprovedAuthor() {
+  getNotApprovedMayor() {
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.find({})
+      NotApprovedMayor.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -205,9 +205,9 @@ class FetchController {
     })
   }
 
-  getSingleNotApprovedAuthor(id) {
+  getSingleNotApprovedMayor(id) {
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.find({ _id: id })
+      NotApprovedMayor.find({ _id: id })
         .then(result => {
           resolve(result)
         })
@@ -215,10 +215,10 @@ class FetchController {
     })
   }
 
-  getSingleApprovedAuthor(id) {
+  getSingleApprovedMayor(id) {
     console.log(id, 'dwfcwe')
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.find({ _id: id })
+      ApprovedMayor.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -227,9 +227,9 @@ class FetchController {
     })
   }
 
-  getApprovedAuthor() {
+  getApprovedMayor() {
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.find({})
+      ApprovedMayor.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -238,9 +238,9 @@ class FetchController {
     })
   }
 
-  getAllAuthor() {
+  getAllMayor() {
     return new Promise((resolve, reject) => {
-      AllAuthor.find({})
+      AllMayor.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -249,9 +249,9 @@ class FetchController {
     })
   }
 
-  getSingleAllAuthor(id) {
+  getSingleAllMayor(id) {
     return new Promise((resolve, reject) => {
-      AllAuthor.find({ _id: id })
+      AllMayor.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)

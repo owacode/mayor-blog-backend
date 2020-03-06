@@ -1,6 +1,6 @@
 const NotApprovedBlog= require('../../model/unapproved_blog');
-const NotApprovedAuthor= require('../../model/unapproved_author');
-const ApprovedAuthor= require('../../model/approved_author');
+const NotApprovedMayor= require('../../model/unapproved_mayor');
+const ApprovedMayor= require('../../model/approved_mayor');
 const ApprovedBlog= require('../../model/approved_blog');
 const updateController= require('./update');
 const SavedBlog = require('../../model/savedblog');
@@ -12,7 +12,7 @@ class DeleteOperationController{
     console.log('del hit');
     return new Promise((resolve, reject)=> {
     // updateController.deleteApproveBlog(values.mainid);
-    
+
     NotApprovedBlog.findByIdAndDelete({_id:id})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
@@ -29,7 +29,7 @@ class DeleteOperationController{
     console.log('del hit');
     return new Promise((resolve, reject)=> {
     updateController.deleteApproveBlog(values.mainid);
-    
+
     NotApprovedBlog.findByIdAndDelete({_id:values.unapproveid})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
@@ -47,7 +47,7 @@ class DeleteOperationController{
     return new Promise((resolve, reject)=> {
 
     updateController.deleteApproveBlog(values.mainid);
-    
+
     ApprovedBlog.findByIdAndDelete({_id:values.approveid})
     .then(result =>{
       console.log("Blog deleted from Approved",result);
@@ -74,16 +74,16 @@ class DeleteOperationController{
 
   // This methord is for deleting the unpproved author
   // when we approved that author profile
-  deleteUnapprovedAuthor(id){
+  deleteUnApprovedMayor(id){
     return new Promise((resolve, reject)=> {
       console.log('hit delete')
-      NotApprovedAuthor.findByIdAndDelete({_id:id})
+      NotApprovedMayor.findByIdAndDelete({_id:id})
       .then(result =>{
-        console.log("Author Profile deleted from UnApproved", result);
+        console.log("Mayor Profile deleted from UnApproved", result);
         resolve(result);
       })
       .catch(err =>{
-        console.log("Error in Deleting Author Profile", err);
+        console.log("Error in Deleting Mayor Profile", err);
         reject(err);
       })
     })

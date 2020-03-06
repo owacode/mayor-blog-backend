@@ -16,4 +16,4 @@ const blog = mongoose.Schema({
   status:{type:String, default:'pending'}
 })
 
-module.exports = mongoose.model('AllBlog', blog, 'AllBlogs');
+module.exports = mongoose.model('AllMayorBlog', blog, 'AllMayorBlogs');
