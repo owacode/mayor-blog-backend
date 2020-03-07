@@ -1,12 +1,12 @@
 //  MongoDB Models
-const NotApprovedBlog = require('../../model/unapproved_blog');
+const NotApprovedMayorBlog = require('../../model/unapproved_blog');
 const NotApprovedMayor = require('../../model/unapproved_mayor');
 const ApprovedMayor = require('../../model/approved_mayor');
-const ApprovedBlog = require('../../model/approved_blog');
-const AllBlog = require('../../model/all_blog');
-const SavedBlog = require('../../model/savedblog');
+const ApprovedMayorBlog = require('../../model/approved_blog');
+const AllMayorBlog = require('../../model/all_blog');
+const MayorSavedBlog = require('../../model/savedblog');
 const AllMayor = require('../../model/all_mayor');
-const AuthorVideo = require('../../model/author_video');
+const mayorVideo = require('../../model/mayor_video');
 
 // Controllers
 const deleteController = require('./delete');
@@ -26,7 +26,7 @@ class AdderOperationController {
   // Like a Blog
   likeTheBlog(values) {
     return new Promise((resolve, res) => {
-      ApprovedBlog.findByIdAndUpdate({ _id: values.blogid }, {
+      ApprovedMayorBlog.findByIdAndUpdate({ _id: values.blogid }, {
         $addToSet: { likes: values.userid }
       })
         .then(result => {
@@ -37,7 +37,7 @@ class AdderOperationController {
     })
   }
 
-  // This methord is for adding the blogid to the author account (only for approved blogs)
+  // This methord is for adding the blogid to the mayor account (only for approved blogs)
   addLikeBlogToUser(values) {
     ApprovedMayor.findByIdAndUpdate({ _id: values.blogid }, {
       $addToSet: { approved_blogs_added: values.blogid }
@@ -46,12 +46,12 @@ class AdderOperationController {
       .catch(err => console.log("Adding blog to account Error", err));
   }
 
-  addVideoByAuthor(value) {
+  addVideoBymayor(value) {
     console.log('hitfefe', value)
     return new Promise((resolve, reject) => {
-      const video = new AuthorVideo({
-        author_email: value.email,
-        author_name: value.name,
+      const video = new mayorVideo({
+        mayor_email: value.email,
+        mayor_name: value.name,
         title: value.title,
         date_added: getTime(),
         desc: value.desc,
@@ -73,18 +73,16 @@ class AdderOperationController {
       this.addBlogToMain(value)
         .then((result) => {
           console.log(result, 'dwdw')
-          const blog = new NotApprovedBlog({
+          const blog = new NotApprovedMayorBlog({
             title: value.title,
-            category: value.category,
             date_added: getTime(),
-            author_id: value.authorid,
-            author_image: value.authorimage,
-            author_name: value.authorname,
+            mayor_id: value.mayorid,
+            mayor_image: value.mayorimage,
+            mayor_name: value.mayorname,
             read_time: value.readtime,
             desc: value.desc,
             image: value.imageurl,
-            main_id: result._id,
-            likecount: 0
+            main_id: result._id
           })
 
           return blog.save()
@@ -92,12 +90,12 @@ class AdderOperationController {
 
         .then((result) => {
           let id = {
-            authorid: result.author_id,
+            mayorid: result.mayor_id,
             blogid: result._id,
             mainid: result.main_id
           }
-          console.log(id, 'mohit author$$$$$$$$$$$$')
-          this.addUnapprovedBlogToUser(id);
+          console.log(id, 'mohit mayor$$$$$$$$$$$$')
+          this.addUnApprovedMayorBlogToUser(id);
           id = {
             mainid: result.main_id,
             blogid: result._id,
@@ -117,19 +115,19 @@ class AdderOperationController {
     return new Promise((resolve, reject) => {
 
       // First Deleting the unapproved blog from the collection
-      deleteController.deleteUnapprovedBlog(value.unapproveid)
+      deleteController.deleteUnApprovedMayorBlog(value.unapproveid)
         .then(result => {
           // console.log("not approved blog", result);
-          const blog = new ApprovedBlog({
+          const blog = new ApprovedMayorBlog({
             title: result.title,
             category: value.category,
             sub_category: value.subcategory,
             read_time: result.read_time,
             date_added: result.date_added,
             date_approved: getTime(),
-            author_id: result.author_id,
-            author_image: result.author_image,
-            author_name: result.author_name,
+            mayor_id: result.mayor_id,
+            mayor_image: result.mayor_image,
+            mayor_name: result.mayor_name,
             main_id: result.main_id,
             desc: result.desc,
             likes: [],
@@ -142,11 +140,11 @@ class AdderOperationController {
         })
         .then((result) => {
           const id = {
-            authorid: result.author_id,
+            mayorid: result.mayor_id,
             blogid: result._id
           }
-          // console.log(id,'author details0');
-          this.addApprovedBlogToUser(id);
+          // console.log(id,'mayor details0');
+          this.addApprovedMayorBlogToUser(id);
           resolve(result)
         })
         .catch(err => reject(err));
@@ -154,11 +152,11 @@ class AdderOperationController {
   }
 
   //This is for adding the blog to collection where all the blogs are stored
-  addToSavedBlog(values) {
+  addToMayorSavedBlog(values) {
     console.log('hit to saved blogs', values);
     return new Promise((resolve, reject) => {
-      const blog = new SavedBlog({
-        author_id: values.authorid,
+      const blog = new MayorSavedBlog({
+        mayor_id: values.mayorid,
         title: values.title,
         date_added: getTime(),
         desc: values.desc,
@@ -182,17 +180,16 @@ class AdderOperationController {
   addBlogToMain(values) {
     console.log('hit all blogs', values);
     return new Promise((resolve, reject) => {
-      const blog = new AllBlog({
+      const blog = new AllMayorBlog({
         approved_id: 'null',
         unapproved_id: 'null',
-        author_id: values.authorid,
-        author_name: values.authorname,
-        author_image: values.authorimage,
+        mayor_id: values.mayorid,
+        mayor_name: values.mayorname,
+        mayor_image: values.mayorimage,
         read_time: values.readtime,
         rejected: false,
         status: 'pending',
         title: values.title,
-        category: values.category,
         date_added: getTime(),
         desc: values.desc,
         image: values.imageurl
@@ -200,28 +197,28 @@ class AdderOperationController {
 
       blog.save()
         .then(result => {
-          console.log("Blog added to allblogs")
+          console.log("Blog added to AllMayorBlogs")
           resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding blog to allblogs", err);
+          console.log("Error in adding blog to AllMayorBlogs", err);
           reject(err);
         })
     })
   }
 
-  // This methord is for adding the blogid to the author account (only for approved blogs)
-  addApprovedBlogToUser(values) {
-    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, {
+  // This methord is for adding the blogid to the mayor account (only for approved blogs)
+  addApprovedMayorBlogToUser(values) {
+    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
       .catch(err => console.log("Adding blog to account Error", err));
   }
 
-  // This methord is for adding the blogid to the author account (for unapproved and all blogs)
-  addUnapprovedBlogToUser(values) {
-    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, {
+  // This methord is for adding the blogid to the mayor account (for unapproved and all blogs)
+  addUnApprovedMayorBlogToUser(values) {
+    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, {
       $addToSet: { unapproved_blogs_added: values.blogid, all_blogs_added: values.mainid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -232,20 +229,20 @@ class AdderOperationController {
     const like = {
       blogid: values.blogid
     }
-    ApprovedMayor.findByIdAndUpdate({ _id: values.authorid }, { $addToSet: { liked_blog: like } })
+    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, { $addToSet: { liked_blog: like } })
       .then(result => console.log("Blog liked added to user"))
       .catch(err => console.log("Error in Adding Blog to liked"))
   }
 
-  // This is for adding the new author
-  // initially author will we unapproved
+  // This is for adding the new mayor
+  // initially mayor will we unapproved
   addUnApprovedMayor(values) {
     console.log(values);
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
     return new Promise((resolve, reject) => {
       this.addMayorToMain(values)
         .then(result => {
-          const author = new NotApprovedMayor({
+          const mayor = new NotApprovedMayor({
             name: values.name,
             bio: 'null',
             image: 'null',
@@ -260,7 +257,7 @@ class AdderOperationController {
             salt: result.salt,
             password: result.password,
           });
-          return author.save();
+          return mayor.save();
         })
 
         .then(result => {
@@ -269,14 +266,14 @@ class AdderOperationController {
             unapproved_id: result._id,
             mainid: result.main_id
           }
-          updateController.addunapproveidtoauthor(data);
+          updateController.addunapproveidtomayor(data);
           resolve(result);
         })
         .catch(err => reject(err));
     })
   }
 
-  // This is for approving the Author
+  // This is for approving the mayor
   // to post the blog by approving his profile
   addApprovedMayor(values) {
     console.log("approve hit")
@@ -284,9 +281,9 @@ class AdderOperationController {
       // First Deleting the Auhor Profile from UnApproved Collection
       deleteController.deleteUnApprovedMayor(values.id)
         .then(result => {
-          approveAuthorMail(result.email);
-          console.log(result, 'hit app author')
-          const author = new ApprovedMayor({
+          approvemayorMail(result.email);
+          console.log(result, 'hit app mayor')
+          const mayor = new ApprovedMayor({
             name: result.name,
             bio: result.bio,
             date_added: result.date_added,
@@ -308,14 +305,14 @@ class AdderOperationController {
             approved_blogs_added: []
             // liked_blog:[]
           });
-          return author.save();
+          return mayor.save();
         })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
   }
 
-  //This is for adding the Author to collection where all the Authors are stored
+  //This is for adding the mayor to collection where all the mayors are stored
   addMayorToMain(values) {
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
     return new Promise((resolve, reject) => {
@@ -341,11 +338,11 @@ class AdderOperationController {
           return mayor.save();
         })
         .then(result => {
-          console.log("Author added to AllMayor")
+          console.log("mayor added to AllMayor")
           return resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding Author to AllMayor", err);
+          console.log("Error in adding mayor to AllMayor", err);
           return reject(err);
         })
     })
@@ -465,14 +462,14 @@ function verifyUser(email) {
 }
 
 function AdminMailForBlog(values) {
-  console.log(values, 'author maillllllllllllllllll$$$')
+  console.log(values, 'mayor maillllllllllllllllll$$$')
   let sendingMail = {
     from: ' "OneWater " <onewateracademy1@gmail.com> ',
     to: 'Atharva.mungee@onewateracademy.org',
     subject: "New Blog Added", // Subject line
-    text: "A new Author Profile has been added Please Check AdminPanel.",
+    text: "A new mayor Profile has been added Please Check AdminPanel.",
     html: `
-      <h4>Blog Added By ${values.authorname}<h4>
+      <h4>Blog Added By ${values.mayorname}<h4>
       <h4>Title: ${values.title}<h4>
       <p> A new Blog has been added Please Check AdminPanel. </p>` // html body
   }
@@ -489,17 +486,17 @@ function AdminMailForBlog(values) {
   })
 }
 
-function approveAuthorMail(email) {
+function approvemayorMail(email) {
   console.log('$$$$$$$$$', email);
   nodeoutlook.sendEmail({
     auth: nodemailerAuthCredential,
     from: ' "OneWater " <OWACODE@onewateracademy.org> ',
     to: email,
     subject: "Profile Approved✔", // Subject line
-    text: "Your Profile has been approved for Author",
+    text: "Your Profile has been approved for mayor",
     html: `
       <h4> Congratulations Hello Welcome to OneWater Learning Academy<h4>
-      <p>Your Profile has been approved for Author. You can now Post Blogs. Login and Add Your Blog.
+      <p>Your Profile has been approved for mayor. You can now Post Blogs. Login and Add Your Blog.
       `, // html body
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i)

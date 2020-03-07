@@ -3,14 +3,75 @@ const NotApprovedBlog = require('../../model/unapproved_blog');
 const NotApprovedMayor = require('../../model/unapproved_mayor');
 const ApprovedMayor = require('../../model/approved_mayor');
 const ApprovedBlog = require('../../model/approved_blog');
-const AllBlog = require('../../model/all_blog');
-const SavedBlog = require('../../model/savedblog');
-const HomeBlog = require('../../model/homeblog');
+const AllMayorBlog = require('../../model/all_blog');
+const MayorSavedBlog = require('../../model/savedblog');
 const AllMayor = require('../../model/all_mayor');
+const MayorVideo = require('../../model/mayor_video');
 
-const AuthorVideo = require('../../model/author_video');
 class FetchController {
   // Fetching all Blogs from DB
+  getAllBlogs() {
+    return new Promise((resolve, reject) => {
+      AllBlog.find({})
+        .then(result => {
+          resolve(result)
+        })
+        .catch(err => reject(err));
+    })
+  }
+
+  // Get Single from All blogs collection
+  getSingleAllBlogs(id) {
+    console.log(id,'all')
+    return new Promise((resolve, reject) => {
+      AllMayorBlog.findOne({ _id: id })
+        .then(result => {
+          // console.log(result);
+          resolve(result)
+        })
+        .catch(err => reject(err));
+    })
+  }
+
+  getAllBlogsByMayor(id) {
+    return new Promise((resolve, reject) => {
+      this.getSingleApprovedMayor({ _id: id })
+        .then(result => {
+          let blogs_id = result[0].all_blogs_added;
+          console.log(blogs_id);
+          return AllMayorBlog.find({ _id: { $in: blogs_id } })
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => reject(err));
+    })
+  }
+
+  getAllNotApprovedBlogs() {
+    return new Promise((resolve, reject) => {
+      NotApprovedBlog.find({})
+        .then(result => {
+          resolve(result)
+        })
+        .catch(err => reject(err));
+    })
+  }
+
+  getUnapprovedBlogsByMayor(id) {
+    return new Promise((resolve, reject) => {
+      this.getSingleApprovedMayor({ _id: id })
+        .then(result => {
+          let blogs_id = result[0].unapproved_blogs_added;
+          return NotApprovedBlog.find({ _id: { $in: blogs_id } })
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(err => reject(err));
+    })
+  }
+
   getApprovedBlogs(value) {
     console.log(value, 'aaa')
     return new Promise((resolve, reject) => {
@@ -35,47 +96,6 @@ class FetchController {
       ApprovedBlog.find({})
         .then(result => {
           // console.log(result);
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getAllBlogs() {
-    return new Promise((resolve, reject) => {
-      AllBlog.find({})
-        .then(result => {
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getHomeSingleBlogs(id) {
-    return new Promise((resolve, reject) => {
-      HomeBlog.find({ _id: id })
-        .then(result => {
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getSingleAllBlogs(id) {
-    return new Promise((resolve, reject) => {
-      AllBlog.find({ _id: id })
-        .then(result => {
-          // console.log(result);
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getNotApprovedBlogs() {
-    return new Promise((resolve, reject) => {
-      NotApprovedBlog.find({})
-        .then(result => {
           resolve(result)
         })
         .catch(err => reject(err));
@@ -115,9 +135,9 @@ class FetchController {
     })
   }
 
-  getSavedBlogsByAuthor(id) {
+  getMayorSavedBlogs(id) {
     return new Promise((resolve, reject) => {
-      SavedBlog.find({author_id:id}).sort({ "date_added": -1 })
+      MayorSavedBlog.find({mayor_id:id}).sort({ "date_added": -1 })
         .then(result => {
           return resolve(result);
         })
@@ -127,9 +147,9 @@ class FetchController {
     })
   }
 
-  getSingleSavedBlog(id) {
+  getSingleMayorSavedBlog(id) {
     return new Promise((resolve, reject) => {
-      SavedBlog.findOne({_id:id})
+      MayorSavedBlog.findOne({_id:id})
         .then(result => {
           return resolve(result);
         })
@@ -139,7 +159,7 @@ class FetchController {
     })
   }
 
-  getApprovedBlogsByAuthor(id) {
+  getApprovedBlogsByMayor(id) {
     return new Promise((resolve, reject) => {
       this.getSingleApprovedMayor({ _id: id })
         .then(result => {
@@ -148,46 +168,6 @@ class FetchController {
         })
         .then(result => {
           resolve(result);
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getUnapprovedBlogsByAuthor(id) {
-    return new Promise((resolve, reject) => {
-      this.getSingleApprovedMayor({ _id: id })
-        .then(result => {
-          let blogs_id = result[0].unapproved_blogs_added;
-          return NotApprovedBlog.find({ _id: { $in: blogs_id } })
-        })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getAllBlogsByAuthor(id) {
-    return new Promise((resolve, reject) => {
-      this.getSingleApprovedMayor({ _id: id })
-        .then(result => {
-          let blogs_id = result[0].all_blogs_added;
-          console.log(blogs_id);
-          return AllBlog.find({ _id: { $in: blogs_id } })
-        })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  // Blogs that are show on the carousel which has three blogs
-  getHomeBlogs() {
-    return new Promise((resolve, reject) => {
-      HomeBlog.find({})
-        .then(result => {
-          resolve(result)
         })
         .catch(err => reject(err));
     })
@@ -261,10 +241,10 @@ class FetchController {
   }
 
 
-  //<<--------------------------------------------------------------------Video Posted By Author Starts--------------------------------------------------------------------->>
+  //<<--------------------------------------------------------------------Video Posted By Mayor Starts--------------------------------------------------------------------->>
   getVideo() {
     return new Promise((resolve, reject) => {
-      AuthorVideo.find({})
+      MayorVideo.find({})
         .then(result => {
           resolve(result)
         })
@@ -274,7 +254,7 @@ class FetchController {
 
   getSingleVideo(id) {
     return new Promise((resolve, reject) => {
-      AuthorVideo.find({ _id: id })
+      MayorVideo.find({ _id: id })
         .then(result => {
           resolve(result)
         })
@@ -282,9 +262,9 @@ class FetchController {
     })
   }
 
-  getAuthorVideo(email) {
+  getMayorVideo(email) {
     return new Promise((resolve, reject) => {
-      AuthorVideo.find({ author_email: email })
+      MayorVideo.find({ Mayor_email: email })
         .then(result => {
           resolve(result)
         })
@@ -302,7 +282,7 @@ class FetchController {
     })
   }
 
-  //<<--------------------------------------------------------------------Video Posted By Author Ends--------------------------------------------------------------------->>
+  //<<--------------------------------------------------------------------Video Posted By Mayor Ends--------------------------------------------------------------------->>
 }
 
 module.exports = new FetchController()

@@ -53,29 +53,6 @@ routes.post('/addimage', upload.single('image'), async (req, res) => {
   })
 })
 
-//Update  Route for Blog to Home The Home Page Blogs ( 3 Blogs )
-routes.patch('/homeblog', upload.single('image'), async (req, res) => {
-  console.log(req.body);
-  const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch((err) => {
-      new Promise(() => { throw new Error('exception!'); });
-      console.log(err);
-    })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
-  updateController.updateHomeBlog(req.body)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Update Blog for HomePage",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
 // Route for UnApproved BLogs
 routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
   console.log(req.body);
@@ -88,49 +65,6 @@ routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
   adderController.addNewBlogToUnApproved(req.body)
     .then(result => {
       // adderController.addBlogToMain(result);
-      res.status(200).json({
-        status: "success",
-        msg: "Blog is send for verification you will be respond back in 24 hours",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for UnApproved BLogs
-routes.post('/saved-unapproved-blog-with-image', upload.single('image'), async (req, res) => {
-  console.log(req.body);
-  const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch((err) => {
-      new Promise(() => { throw new Error('exception!'); });
-      console.log(err);
-    })
-  req.body.imageurl = result.url;
-  deleteController.deleteSavedBlog(req.body.savedid);
-  adderController.addNewBlogToUnApproved(req.body)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Blog is send for verification you will be respond back in 24 hours",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for UnApproved BLogs from saved without image upload
-routes.post('/saved-unapproved-blog', (req, res) => {
-  console.log(req.body);
-  req.body.imageurl = req.body.image;
-  deleteController.deleteSavedBlog(req.body.savedid);
-  adderController.addNewBlogToUnApproved(req.body)
-    .then(result => {
       res.status(200).json({
         status: "success",
         msg: "Blog is send for verification you will be respond back in 24 hours",
@@ -165,6 +99,49 @@ routes.post('/approve-blog', (req, res) => {
     }));
 })
 
+// Route for UnApproved BLogs
+routes.post('/saved-unapproved-blog-with-image', upload.single('image'), async (req, res) => {
+  console.log(req.body);
+  const result = await cloudinary.v2.uploader.upload(req.file.path)
+    .catch((err) => {
+      new Promise(() => { throw new Error('exception!'); });
+      console.log(err);
+    })
+  req.body.imageurl = result.url;
+  deleteController.deleteMayorSavedBlog(req.body.savedid);
+  adderController.addNewBlogToUnApproved(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Blog is send for verification you will be respond back in 24 hours",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for UnApproved BLogs from saved without image upload
+routes.post('/saved-unapproved-blog', (req, res) => {
+  console.log(req.body);
+  req.body.imageurl = req.body.image;
+  deleteController.deleteMayorSavedBlog(req.body.savedid);
+  adderController.addNewBlogToUnApproved(req.body)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Blog is send for verification you will be respond back in 24 hours",
+        payload: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Saved Blogs
 routes.post('/save-blog', upload.single('image'), async (req, res) => {
   console.log(req.body, 'catehitttt');
@@ -174,7 +151,7 @@ routes.post('/save-blog', upload.single('image'), async (req, res) => {
       console.log(err);
     })
   req.body.imageurl = result.url;
-  adderController.addToSavedBlog(req.body)
+  adderController.addToMayorSavedBlog(req.body)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -214,7 +191,7 @@ routes.patch('/updateimage-saved-blog', upload.single('image'), async (req, res)
 // Route for Saved Blogs
 routes.patch('/update-saved-blog', (req, res) => {
   console.log(req.body, 'updated saved hit');
-  updateController.updateSavedBlog(req.body)
+  updateController.updateMayorSavedBlog(req.body)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -231,7 +208,7 @@ routes.patch('/update-saved-blog', (req, res) => {
 // Route for Deleteing Approved Blogs
 routes.post('/deleteapproveblog', (req, res) => {
   console.log(req.body);
-  deleteController.deleteApprovedBlog(req.body)
+  deleteController.deleteApprovedMayorBlog(req.body)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Approved Blog Deleted Successfully",
@@ -246,7 +223,7 @@ routes.post('/deleteapproveblog', (req, res) => {
 // Route for Deleteing the UnApproved BLogs
 routes.post('/deleteunapproveblog', (req, res) => {
   console.log(req.body);
-  deleteController.deleteAuthorUnapprovedBlog(req.body)
+  deleteController.deleteAuthorUnApprovedMayorBlog(req.body)
     .then((result) => res.status(200).json({
       status: "success",
       msg: "UnApproved Blog Deleted Successfully"
@@ -258,7 +235,6 @@ routes.post('/deleteunapproveblog', (req, res) => {
 })
 
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
-
 
 // Route for UnApproved Author Profile
 routes.post('/unapproved-mayor', async (req, res) => {
@@ -379,25 +355,7 @@ routes.post('/reject-mayor', (req, res) => {
     }));
 })
 
-// Route for Getting Details of Author Profile
-routes.get('/single-author/:id', (req, res) => {
-  fetchController.getSingleApprovedMayor(req.params.id)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Author Profile",
-        result: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-
 /*<-------------------------------------------------######Other Routes for Authentication######--------------------------------------------------->*/
-
 
 // Route for Login
 routes.post('/login', async (req, res) => {
@@ -414,20 +372,6 @@ routes.post('/login', async (req, res) => {
       status: "error",
       msg: err
     }));
-})
-
-// This is to Verify the Email
-routes.get('/activate/:token', (req, res) => {
-  adderController.verifyMail(req.params)
-    .then(result => {
-      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
-    })
-    .catch(err => {
-      res.status(400).json({
-        status: 'error',
-        error: err
-      })
-    })
 })
 
 routes.post('/reset-password', (req, res)=> {

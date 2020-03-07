@@ -6,124 +6,9 @@ const deleteController = require('./controller/delete');
 const updateController = require('./controller/update');
 const fetchController = require('./controller/fetch');
 
-// Route for Getting Videos
-routes.get('/video', (req, res) => {
-  console.log('hit video')
-  fetchController.getVideo()
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting Videos by Author
-routes.get('/singlevideo/:email', (req, res) => {
-  console.log('hit videoooo', req.params.email)
-  fetchController.getAuthorVideo(req.params.email)
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Single Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting Videos by Author
-routes.get('/video/:id', (req, res) => {
-  console.log('hit videoooo', req.params.id)
-  fetchController.getSingleVideo(req.params.id)
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Single Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Home Blogs
-routes.get('/homeblog', (req, res) => {
-  fetchController.getHomeBlogs(req.body)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Home Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Home Blogs
-routes.get('/homeblog/:id', (req, res) => {
-  fetchController.getHomeSingleBlogs(req.params.id)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Home Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting All Approved Blogs
-routes.get('/approveblogs', (req, res) => {
-  fetchController.getApprovedBlogs(req.body)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting All Approved Blogs
-routes.get('/category/:cat', (req, res) => {
-  fetchController.getCategoryApprovedBlogs(req.params.cat)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting All Not Approved Blogs
-routes.get('/notblogs', (req, res) => {
-  fetchController.getNotApprovedBlogs()
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "NotApproved Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
 // Route for Getting All Blogs
 routes.get('/allblogs', (req, res) => {
-  fetchController.getAllBlogs(req.body)
+  fetchController.getAllBlogs()
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -137,6 +22,7 @@ routes.get('/allblogs', (req, res) => {
 
 // Route for Getting a AllBlogs
 routes.get('/allblogs/:id', (req, res) => {
+  console.log(req.params.id,'idd');
   fetchController.getSingleAllBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -149,10 +35,84 @@ routes.get('/allblogs/:id', (req, res) => {
     }));
 })
 
+routes.get('/allmayorblogs/:id', (req, res) => {
+  console.log(req.params, 'kksnkk')
+  fetchController.getAllBlogsByMayor(req.params.id)
+    .then(result => {
+      res.json({
+        status: "success",
+        msg: "Blogs by Author Fetch Successfully",
+        result: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting All Not Approved Blogs from not approved collections
+routes.get('/notapprovedblogs', (req, res) => {
+  fetchController.getAllNotApprovedBlogs()
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "NotApproved Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+routes.get('/notapprovedblogsbymayor/:id', (req, res) => {
+  console.log(req.params, 'not app by mayor')
+  fetchController.getUnapprovedBlogsByMayor(req.params.id)
+    .then(result => {
+      res.json({
+        status: "success",
+        msg: "Blogs by Author Fetch Successfully",
+        result: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting All Approved Blogs
+routes.get('/approveblogs', (req, res) => {
+  fetchController.getApprovedMayorBlogs(req.body)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting All Category Wise Blogs
+routes.get('/category/:cat', (req, res) => {
+  fetchController.getCategoryApprovedMayorBlogs(req.params.cat)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Getting a saved blogs by author
-routes.get('/savedblogs/:id', (req, res) => {
+routes.get('/mayorsavedblogs/:id', (req, res) => {
   console.log(req.params.id)
-  fetchController.getSavedBlogsByAuthor(req.params.id)
+  fetchController.getMayorSavedBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Saved Blog Fetch Successfully",
@@ -165,9 +125,9 @@ routes.get('/savedblogs/:id', (req, res) => {
 })
 
 // Route for Getting a saved blogs by author
-routes.get('/singlesavedblog/:id', (req, res) => {
+routes.get('/singlemayorsavedblog/:id', (req, res) => {
   console.log(req.params.id)
-  fetchController.getSingleSavedBlog(req.params.id)
+  fetchController.getSingleMayorSavedBlog(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single Saved Blog Fetch Successfully",
@@ -179,9 +139,9 @@ routes.get('/singlesavedblog/:id', (req, res) => {
     }));
 })
 
-// Route for Getting Single NOtApprovedBlog Authors
+// Route for Getting Single NotApprovedMayorBlog Authors
 routes.get('/singlenotappblog/:id', (req, res) => {
-  fetchController.getSingleNotApprovedBlog(req.params.id)
+  fetchController.getSingleNotApprovedMayorBlog(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single NotApproved Author Fetch Successfully",
@@ -193,10 +153,10 @@ routes.get('/singlenotappblog/:id', (req, res) => {
     }));
 })
 
-// Route for Getting Single ApprovedBlog Authors
+// Route for Getting Single ApprovedMayorBlog Authors
 routes.get('/singleappblog/:id', (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
-  fetchController.getSingleApprovedBlogs(req.params.id)
+  fetchController.getSingleApprovedMayorBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single Approved Blog Fetch Successfully",
@@ -208,9 +168,9 @@ routes.get('/singleappblog/:id', (req, res) => {
     }));
 })
 
-routes.get('/authorapprovedblogs/:id', (req, res) => {
-  console.log(req.params, 'kksnkk')
-  fetchController.getApprovedBlogsByAuthor(req.params.id)
+routes.get('/approvedblogsbymayor/:id', (req, res) => {
+  console.log(req.params, 'kksnkk');
+  fetchController.getApprovedBlogsByMayor(req.params.id)
     .then(result => {
       res.json({
         status: "success",
@@ -224,37 +184,6 @@ routes.get('/authorapprovedblogs/:id', (req, res) => {
     }));
 })
 
-routes.get('/authorunapprovedblogs/:id', (req, res) => {
-  console.log(req.params, 'kksnkk')
-  fetchController.getUnapprovedBlogsByAuthor(req.params.id)
-    .then(result => {
-      res.json({
-        status: "success",
-        msg: "Blogs by Author Fetch Successfully",
-        result: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-routes.get('/authorallblogs/:id', (req, res) => {
-  console.log(req.params, 'kksnkk')
-  fetchController.getAllBlogsByAuthor(req.params.id)
-    .then(result => {
-      res.json({
-        status: "success",
-        msg: "Blogs by Author Fetch Successfully",
-        result: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
 // Route for Getting All Not Approved Authors
 routes.get('/notauthor', (req, res) => {
@@ -326,14 +255,30 @@ routes.get('/AllMayor', (req, res) => {
     }));
 })
 
-// Route for Getting All Authors
-routes.get('/AllMayor/:id', (req, res) => {
+// Route for Getting Single Mayor
+routes.get('/allmayor/:id', (req, res) => {
   fetchController.getSingleAllMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single All Author Fetch Successfully",
       result: result
     }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting Details of Author Profile
+routes.get('/single-mayor/:id', (req, res) => {
+  fetchController.getSingleApprovedMayor(req.params.id)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Author Profile",
+        result: result
+      })
+    })
     .catch(err => res.status(200).json({
       status: "error",
       payload: err
@@ -369,5 +314,63 @@ routes.get('/reset/:token', (req, res) => {
     })
 })
 
+// This is to Verify the Email
+routes.get('/activate/:token', (req, res) => {
+  adderController.verifyMail(req.params)
+    .then(result => {
+      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
+    })
+    .catch(err => {
+      res.status(400).json({
+        status: 'error',
+        error: err
+      })
+    })
+})
 
+
+// Route for Getting Videos
+routes.get('/video', (req, res) => {
+  console.log('hit video')
+  fetchController.getVideo()
+    .then((result) => res.status(200).json({
+      status: "success",
+      msg: "Video Fetch",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting Videos by Author
+routes.get('/singlevideo/:email', (req, res) => {
+  console.log('hit videoooo', req.params.email)
+  fetchController.getAuthorVideo(req.params.email)
+    .then((result) => res.status(200).json({
+      status: "success",
+      msg: "Single Video Fetch",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
+// Route for Getting Videos by Author
+routes.get('/video/:id', (req, res) => {
+  console.log('hit videoooo', req.params.id)
+  fetchController.getSingleVideo(req.params.id)
+    .then((result) => res.status(200).json({
+      status: "success",
+      msg: "Single Video Fetch",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
 module.exports = routes;
