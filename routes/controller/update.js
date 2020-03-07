@@ -87,27 +87,27 @@ class UpdateController {
     })
   }
 
-    // Update Saved Blog
-    updateSavedWithImageBlog(values) {
-      console.log(values, 'update MayorSavedBlog')
-      return new Promise((resolve, reject) => {
-        MayorSavedBlog.findByIdAndUpdate({ _id: values.id }, {
-          $set: {
-            title: values.title,
-            desc: values.desc,
-            image: values.imageurl
-          }
-        })
-          .then(result => {
-            console.log('Saved Blog Updated with Image');
-            return resolve(result);
-          })
-          .catch(err => {
-            console.log('error in Updated Saved Blog with Image', err);
-            return reject(err);
-          });
+  // Update Saved Blog
+  updateSavedWithImageBlog(values) {
+    console.log(values, 'update MayorSavedBlog')
+    return new Promise((resolve, reject) => {
+      MayorSavedBlog.findByIdAndUpdate({ _id: values.id }, {
+        $set: {
+          title: values.title,
+          desc: values.desc,
+          image: values.imageurl
+        }
       })
-    }
+        .then(result => {
+          console.log('Saved Blog Updated with Image');
+          return resolve(result);
+        })
+        .catch(err => {
+          console.log('error in Updated Saved Blog with Image', err);
+          return reject(err);
+        });
+    })
+  }
 
   // Approve a Blog
 
@@ -175,7 +175,7 @@ class UpdateController {
         $set: {
           name: values.name,
           bio: values.bio,
-          image:values.imageurl,
+          image: values.imageurl,
           location: values.location,
           linkedIn_id: values.linkedIn,
           twitter_id: values.twitter,
@@ -245,7 +245,7 @@ class UpdateController {
   recoverPassword(email) {
     return new Promise((resolve, reject) => {
       console.log('got email', email)
-      token = jwt.sign({ email: email, platform: 'blog_moyor' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
+      token = jwt.sign({ email: email, platform: 'blog_mayor' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
       console.log(token);
       ApprovedMayor.find({ email: email })
         .then(result => {
