@@ -115,7 +115,7 @@ class FetchController {
 
   getSingleApprovedBlogs(id) {
     return new Promise((resolve, reject) => {
-      ApprovedBlog.find({ _id: id })
+      ApprovedBlog.findOne({ _id: id })
         .then(result => {
           resolve(result)
         })

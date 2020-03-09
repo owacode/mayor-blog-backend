@@ -83,7 +83,7 @@ routes.get('/notapprovedblogsbymayor/:id', (req, res) => {
 
 // Route for Getting All Approved Blogs
 routes.get('/approveblogs', (req, res) => {
-  fetchController.getApprovedMayorBlogs(req.body)
+  fetchController.getApprovedBlogs(req.body)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -156,7 +156,7 @@ routes.get('/singlenotappblog/:id', (req, res) => {
 // Route for Getting Single ApprovedMayorBlog Authors
 routes.get('/singleappblog/:id', (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
-  fetchController.getSingleApprovedMayorBlogs(req.params.id)
+  fetchController.getSingleApprovedBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single Approved Blog Fetch Successfully",
@@ -228,7 +228,7 @@ routes.get('/ApprovedMayor', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/ApprovedMayor/:id', (req, res) => {
+routes.get('/approvedmayor/:id', (req, res) => {
   fetchController.getSingleApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
