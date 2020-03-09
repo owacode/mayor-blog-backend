@@ -266,7 +266,7 @@ class AdderOperationController {
             unapproved_id: result._id,
             mainid: result.main_id
           }
-          updateController.addunapproveidtomayor(data);
+          updateController.addUnapproveIdToMayor(data);
           resolve(result);
         })
         .catch(err => reject(err));

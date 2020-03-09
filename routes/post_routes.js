@@ -285,7 +285,7 @@ routes.post('/update-approveprofile-with-image',upload.single('imageurl'), async
       console.log(err);
     })
   req.body.imageurl = result.url;
-  updateController.updateAuthorApprovedProfile(req.body)
+  updateController.updateMayorApprovedProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -302,7 +302,7 @@ routes.post('/update-approveprofile-with-image',upload.single('imageurl'), async
 // Route for UnApproved Author Profile
 routes.post('/update-approveprofile', (req, res) => {
   console.log(req.body);
-  updateController.updateAuthorApprovedProfile(req.body)
+  updateController.updateMayorApprovedProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -325,7 +325,7 @@ routes.post('/approve-mayor', (req, res) => {
       console.log(result._id, 'idddddddd');
       id.approveid = result._id;
       console.log(id, 'dfdsf');
-      updateController.approveAuthor(id);
+      updateController.approveMayor(id);
       res.status(200).json({
         status: "success",
         msg: "Author Profile is Approved",

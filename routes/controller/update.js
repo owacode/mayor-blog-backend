@@ -168,7 +168,7 @@ class UpdateController {
   }
 
   // Update Profile of Author
-  updateAuthorApprovedProfile(values) {
+  updateMayorApprovedProfile(values) {
     console.log(values, 'author iddddddd ###')
     return new Promise((resolve, reject) => {
       ApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
@@ -217,7 +217,7 @@ class UpdateController {
 
   //Add Unapprove id to Author
 
-  addunapproveidtoauthor(values) {
+  addUnapproveIdToMayor(values) {
     console.log(values, 'author iddddddd')
     AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated addunapproveidtoauthor'))
@@ -225,7 +225,7 @@ class UpdateController {
   }
 
   // Approve a Author
-  approveAuthor(values) {
+  approveMayor(values) {
     console.log(values, 'author iddddddd')
     AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated approveAuthor', result))
