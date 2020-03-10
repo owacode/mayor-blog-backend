@@ -149,7 +149,6 @@ class UpdateController {
     return new Promise((resolve, reject) => {
       NotApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
-          name: values.name,
           bio: values.bio,
           image: values.imageurl,
           location: values.location,
@@ -173,7 +172,6 @@ class UpdateController {
     return new Promise((resolve, reject) => {
       ApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
         $set: {
-          name: values.name,
           bio: values.bio,
           image: values.imageurl,
           location: values.location,
@@ -199,7 +197,6 @@ class UpdateController {
     console.log(values, 'author iddddddd')
     AllMayor.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
-        name: values.name,
         bio: values.bio,
         image: values.imageurl,
         location: values.location,

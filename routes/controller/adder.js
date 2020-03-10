@@ -321,6 +321,7 @@ class AdderOperationController {
           const mayor = new AllMayor({
             approved_id: 'null',
             bio: 'null',
+            location: 'null',
             rejected: false,
             status: 'pending',
             name: values.name,

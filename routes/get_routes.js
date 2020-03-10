@@ -186,7 +186,7 @@ routes.get('/approvedblogsbymayor/:id', (req, res) => {
 
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
 // Route for Getting All Not Approved Authors
-routes.get('/notauthor', (req, res) => {
+routes.get('/pending-mayor', (req, res) => {
   fetchController.getNotApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
@@ -200,7 +200,7 @@ routes.get('/notauthor', (req, res) => {
 })
 
 // Route for Getting Single Not Approved Author
-routes.get('/notauthor/:id', (req, res) => {
+routes.get('/pending-mayor/:id', (req, res) => {
   fetchController.getSingleNotApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -242,7 +242,7 @@ routes.get('/approvedmayor/:id', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/AllMayor', (req, res) => {
+routes.get('/all-mayor', (req, res) => {
   fetchController.getAllMayor()
     .then(result => res.status(200).json({
       status: "success",
@@ -256,7 +256,7 @@ routes.get('/AllMayor', (req, res) => {
 })
 
 // Route for Getting Single Mayor
-routes.get('/allmayor/:id', (req, res) => {
+routes.get('/all-mayor/:id', (req, res) => {
   fetchController.getSingleAllMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
