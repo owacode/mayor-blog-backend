@@ -328,7 +328,7 @@ routes.post('/approve-mayor', (req, res) => {
       updateController.approveMayor(id);
       res.status(200).json({
         status: "success",
-        msg: "Author Profile is Approved",
+        msg: "Mayor Profile is Approved",
         result: result
       })
     })
@@ -346,7 +346,7 @@ routes.post('/reject-mayor', (req, res) => {
       updateController.rejectAuthorProfile(req.body)
       res.status(200).json({
         status: "success",
-        msg: "Author Profile Rejected"
+        msg: "Mayor Profile Rejected"
       })
     })
     .catch(err => res.status(200).json({

@@ -12,7 +12,7 @@ class FetchController {
   // Fetching all Blogs from DB
   getAllBlogs() {
     return new Promise((resolve, reject) => {
-      AllBlog.find({})
+      AllMayorBlog.find({})
         .then(result => {
           resolve(result)
         })

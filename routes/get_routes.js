@@ -65,6 +65,19 @@ routes.get('/notapprovedblogs', (req, res) => {
     }));
 })
 
+// Route for Getting All Not Approved Blogs from not approved collections
+routes.get('/notapprovedblogs/:id', (req, res) => {
+  fetchController.getSingleNotApprovedBlog(req.params.id)
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "NotApproved Single Blog Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
 routes.get('/notapprovedblogsbymayor/:id', (req, res) => {
   console.log(req.params, 'not app by mayor')
   fetchController.getUnapprovedBlogsByMayor(req.params.id)
@@ -214,7 +227,7 @@ routes.get('/pending-mayor/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/ApprovedMayor', (req, res) => {
+routes.get('/approvedmayor', (req, res) => {
   fetchController.getApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
