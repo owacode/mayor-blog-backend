@@ -31,6 +31,16 @@ class UpdateController {
     })
   }
 
+      // Update CRO Approved Blog Added Count
+      updateApprovedBlogCountOfMayor(id) {
+        console.log('hitfefe', id)
+          ApprovedMayor.update(
+            { _id: id },
+            { $inc: { 'approved_blogs_count': 1 } })
+            .then(response => { console.log('approved blog Incremented blog'); })
+            .catch(err => console.log(err));
+      }
+
   // Update Blog to Home The Home Page Blogs ( 3 Blogs )
   updateHomeBlog(value) {
     console.log('hitfefe', value)

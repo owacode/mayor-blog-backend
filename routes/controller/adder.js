@@ -101,7 +101,7 @@ class AdderOperationController {
             blogid: result._id,
           }
           updateController.addUnapproveIdToMainBlog(id);
-          AdminMailForBlog(value);
+          // AdminMailForBlog(value);
           resolve(result);
         })
         .catch(err => reject(err));
@@ -143,7 +143,7 @@ class AdderOperationController {
             mayorid: result.mayor_id,
             blogid: result._id
           }
-          // console.log(id,'mayor details0');
+          updateController.updateApprovedBlogCountOfMayor(result.mayor_id);
           this.addApprovedMayorBlogToUser(id);
           resolve(result)
         })

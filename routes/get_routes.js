@@ -243,6 +243,20 @@ routes.get('/approvedmayor',c.g,c.s, (req, res) => {
     }));
 })
 
+// Route for Top 3 Approved Mayor
+routes.get('/topauthor', (req, res) => {
+  fetchController.getTopMayor()
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Top 3 Approved Mayor Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Getting Single Approved Author
 routes.get('/approvedmayor/:id', (req, res) => {
   fetchController.getSingleApprovedMayor(req.params.id)

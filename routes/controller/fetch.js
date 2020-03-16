@@ -147,6 +147,19 @@ class FetchController {
     })
   }
 
+  getTopMayor() {
+    return new Promise((resolve, reject) => {
+      ApprovedMayor.find({}).sort({ "approved_blogs_count": -1 }).limit(3)
+        .then(result => {
+          return resolve(result);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    })
+  }
+
+
   getSingleMayorSavedBlog(id) {
     return new Promise((resolve, reject) => {
       MayorSavedBlog.findOne({_id:id})

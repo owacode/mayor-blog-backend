@@ -24,7 +24,7 @@ const author = mongoose.Schema({
   approved_blogs_added:[],
   unapproved_blogs_added:[],
   all_blogs_added:[],
-  // liked_blog:[] Remove it
+  approved_blogs_count:{type: Number, default: 0}
 })
 
 module.exports = mongoose.model('ApprovedMayor', author, 'ApprovedMayors')
