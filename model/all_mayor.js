@@ -21,4 +21,4 @@ const author = mongoose.Schema({
   form_filled:{type:Boolean},
 }).plugin(validator);
 
-module.exports = mongoose.model('AllMayor', author, 'AllMayors');
+module.exports = mongoose.model('AllLeader', author, 'AllLeaders');

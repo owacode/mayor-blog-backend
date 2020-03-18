@@ -18,4 +18,4 @@ const author = mongoose.Schema({
   form_filled:{type:Boolean},
 }).plugin(validator);
 
-module.exports = mongoose.model('NotApprovedMayor', author, 'NotApprovedMayors')
+module.exports = mongoose.model('NotApprovedLeader', author, 'NotApprovedLeaders')

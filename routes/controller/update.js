@@ -1,12 +1,11 @@
 //  MongoDB Models
-const NotApprovedMayorBlog = require('../../model/unapproved_blog');
-const NotApprovedMayor = require('../../model/unapproved_mayor');
-const ApprovedMayor = require('../../model/approved_mayor');
-const ApprovedMayorBlog = require('../../model/approved_blog');
-const MayorSavedBlog = require('../../model/savedblog');
-const AllMayorBlog = require('../../model/all_blog');
-const AllMayor = require('../../model/all_mayor');
-const HomeBlog = require('../../model/homeblog');
+const NotApprovedLeaderBlog = require('../../model/unapproved_blog');
+const NotApprovedLeader = require('../../model/unapproved_mayor');
+const ApprovedLeader = require('../../model/approved_mayor');
+const ApprovedLeaderBlog = require('../../model/approved_blog');
+const LeaderSavedBlog = require('../../model/savedblog');
+const AllLeaderBlog = require('../../model/all_blog');
+const AllLeader = require('../../model/all_mayor');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodeoutlook = require('nodejs-nodemailer-outlook');
@@ -23,7 +22,7 @@ class UpdateController {
     console.log('hitfefe', id)
     return new Promise((resolve, reject) => {
 
-      ApprovedMayorBlog.update(
+      ApprovedLeaderBlog.update(
         { _id: id },
         { $inc: { 'likecount': 1 } })
         .then(response => { console.log('Like Incremented blog'); })
@@ -34,36 +33,18 @@ class UpdateController {
       // Update CRO Approved Blog Added Count
       updateApprovedBlogCountOfMayor(id) {
         console.log('hitfefe', id)
-          ApprovedMayor.update(
+          ApprovedLeader.update(
             { _id: id },
             { $inc: { 'approved_blogs_count': 1 } })
             .then(response => { console.log('approved blog Incremented blog'); })
             .catch(err => console.log(err));
       }
 
-  // Update Blog to Home The Home Page Blogs ( 3 Blogs )
-  updateHomeBlog(value) {
-    console.log('hitfefe', value)
-    return new Promise((resolve, reject) => {
-
-      HomeBlog.updateOne({ _id: value.id },
-        {
-          title: value.title,
-          category: value.category,
-          date_added: getTime(),
-          desc: value.desc,
-          image: value.imageurl
-        })
-        .then(response => { console.log('Updated blog'); resolve(response) })
-        .catch(err => reject(err));
-    })
-  }
-
   // Updating a Blog
   updateBlog(value) {
     return new Promise((resolve, reject) => {
 
-      ApprovedMayorBlog.updateOne({ _id: value.id },
+      ApprovedLeaderBlog.updateOne({ _id: value.id },
         {
           title: value.title,
           category: value.category,
@@ -78,9 +59,9 @@ class UpdateController {
 
   // Update Saved Blog
   updateMayorSavedBlog(values) {
-    console.log(values, 'update MayorSavedBlog')
+    console.log(values, 'update LeaderSavedBlog')
     return new Promise((resolve, reject) => {
-      MayorSavedBlog.findByIdAndUpdate({ _id: values.id }, {
+      LeaderSavedBlog.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           title: values.title,
           desc: values.desc
@@ -99,9 +80,9 @@ class UpdateController {
 
   // Update Saved Blog
   updateSavedWithImageBlog(values) {
-    console.log(values, 'update MayorSavedBlog')
+    console.log(values, 'update LeaderSavedBlog')
     return new Promise((resolve, reject) => {
-      MayorSavedBlog.findByIdAndUpdate({ _id: values.id }, {
+      LeaderSavedBlog.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           title: values.title,
           desc: values.desc,
@@ -123,7 +104,7 @@ class UpdateController {
 
   approveBlog(values) {
     console.log(values, 'blog iddddddd')
-    AllMayorBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
+    AllLeaderBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -131,7 +112,7 @@ class UpdateController {
   // Delete a Approve Blog
   deleteApproveBlog(id) {
     console.log('main del hit');
-    AllMayorBlog.findByIdAndUpdate({ _id: id }, { $set: { status: 'deleted' } })
+    AllLeaderBlog.findByIdAndUpdate({ _id: id }, { $set: { status: 'deleted' } })
       .then(result => console.log('Updated to deleted'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -139,7 +120,7 @@ class UpdateController {
 
   rejectBlog(values) {
     return new Promise((resolve, reject) => {
-      AllMayorBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
+      AllLeaderBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
@@ -148,7 +129,7 @@ class UpdateController {
   //Add UnApproved id of Blog to Main Blog
   addUnapproveIdToMainBlog(values) {
     console.log(values, 'author iddddddd')
-    AllMayorBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.blogid } })
+    AllLeaderBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.blogid } })
       .then(result => console.log('Updated to addUnapproveIdToMainBlog'))
       .catch(err => console.log('error in updating addUnapproveIdToMainBlog', err));
   }
@@ -157,7 +138,7 @@ class UpdateController {
   updateMayorProfile(values) {
     console.log(values, 'author iddddddd')
     return new Promise((resolve, reject) => {
-      NotApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
+      NotApprovedLeader.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           bio: values.bio,
           image: values.imageurl,
@@ -168,7 +149,7 @@ class UpdateController {
         }
       })
         .then(result => {
-          console.log('Updated to NotApprovedMayor');
+          console.log('Updated to NotApprovedLeader');
           this.updateMayorProfileMain(values);
           resolve(result);
         })
@@ -180,7 +161,7 @@ class UpdateController {
   updateMayorApprovedProfile(values) {
     console.log(values, 'author iddddddd ###')
     return new Promise((resolve, reject) => {
-      ApprovedMayor.findByIdAndUpdate({ _id: values.id }, {
+      ApprovedLeader.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           bio: values.bio,
           image: values.imageurl,
@@ -205,7 +186,7 @@ class UpdateController {
   // Update Profile of Author TO Main Collection
   updateMayorProfileMain(values) {
     console.log(values, 'author iddddddd')
-    AllMayor.findByIdAndUpdate({ _id: values.mainid }, {
+    AllLeader.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
         bio: values.bio,
         image: values.imageurl,
@@ -216,7 +197,7 @@ class UpdateController {
       }
     })
       .then(result => {
-        console.log('Updated to AllMayor');
+        console.log('Updated to AllLeader');
 
       })
       .catch(err => console.log('error in updating approve', err));
@@ -226,7 +207,7 @@ class UpdateController {
 
   addUnapproveIdToMayor(values) {
     console.log(values, 'author iddddddd')
-    AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
+    AllLeader.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated addunapproveidtoauthor'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -234,7 +215,7 @@ class UpdateController {
   // Approve a Author
   approveMayor(values) {
     console.log(values, 'author iddddddd')
-    AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
+    AllLeader.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated approveAuthor', result))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -243,7 +224,7 @@ class UpdateController {
   rejectAuthorProfile(values) {
     console.log(values, 'mohit hit')
     return new Promise((resolve, reject) => {
-      AllMayor.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
+      AllLeader.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
@@ -254,7 +235,7 @@ class UpdateController {
       console.log('got email', email)
       token = jwt.sign({ email: email, platform: 'blog_mayor' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
       console.log(token);
-      ApprovedMayor.find({ email: email })
+      ApprovedLeader.find({ email: email })
         .then(result => {
           console.log(result)
           if (result.length == 0) {
@@ -273,7 +254,7 @@ class UpdateController {
       saltHashPassword(values.password)
         .then(result => {
           console.log('hash !!!', result);
-          return AllMayor.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
+          return AllLeader.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
         })
         .then(result => {
           return resolve(result);

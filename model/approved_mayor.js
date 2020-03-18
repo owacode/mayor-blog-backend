@@ -27,4 +27,4 @@ const author = mongoose.Schema({
   approved_blogs_count:{type: Number, default: 0}
 })
 
-module.exports = mongoose.model('ApprovedMayor', author, 'ApprovedMayors')
+module.exports = mongoose.model('ApprovedLeader', author, 'ApprovedLeaders')

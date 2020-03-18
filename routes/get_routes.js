@@ -155,7 +155,7 @@ routes.get('/singlemayorsavedblog/:id',c.g,c.s, (req, res) => {
     }));
 })
 
-// Route for Getting Single NotApprovedMayorBlog Authors
+// Route for Getting Single NotApprovedLeaderBlog Authors
 routes.get('/singlenotappblog/:id',c.g,c.s, (req, res) => {
   fetchController.getSingleNotApprovedMayorBlog(req.params.id)
     .then(result => res.status(200).json({
@@ -169,7 +169,7 @@ routes.get('/singlenotappblog/:id',c.g,c.s, (req, res) => {
     }));
 })
 
-// Route for Getting Single ApprovedMayorBlog Authors
+// Route for Getting Single ApprovedLeaderBlog Authors
 routes.get('/singleappblog/:id',c.g,c.s, (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
   fetchController.getSingleApprovedBlogs(req.params.id)
@@ -230,7 +230,7 @@ routes.get('/pending-mayor/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/approvedmayor',c.g,c.s, (req, res) => {
+routes.get('/ApprovedLeader',c.g,c.s, (req, res) => {
   fetchController.getApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
@@ -258,7 +258,7 @@ routes.get('/topauthor', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/approvedmayor/:id', (req, res) => {
+routes.get('/ApprovedLeader/:id', (req, res) => {
   fetchController.getSingleApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",

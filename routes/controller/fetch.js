@@ -1,18 +1,17 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedMayor = require('../../model/unapproved_mayor');
-const ApprovedMayor = require('../../model/approved_mayor');
+const NotApprovedLeader = require('../../model/unapproved_mayor');
+const ApprovedLeader = require('../../model/approved_mayor');
 const ApprovedBlog = require('../../model/approved_blog');
-const AllMayorBlog = require('../../model/all_blog');
-const MayorSavedBlog = require('../../model/savedblog');
-const AllMayor = require('../../model/all_mayor');
-const MayorVideo = require('../../model/mayor_video');
+const AllLeaderBlog = require('../../model/all_blog');
+const LeaderSavedBlog = require('../../model/savedblog');
+const AllLeader = require('../../model/all_mayor');
 
 class FetchController {
   // Fetching all Blogs from DB
   getAllBlogs() {
     return new Promise((resolve, reject) => {
-      AllMayorBlog.find({})
+      AllLeaderBlog.find({})
         .then(result => {
           resolve(result)
         })
@@ -24,7 +23,7 @@ class FetchController {
   getSingleAllBlogs(id) {
     console.log(id,'all')
     return new Promise((resolve, reject) => {
-      AllMayorBlog.findOne({ _id: id })
+      AllLeaderBlog.findOne({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -39,7 +38,7 @@ class FetchController {
         .then(result => {
           let blogs_id = result[0].all_blogs_added;
           console.log(blogs_id);
-          return AllMayorBlog.find({ _id: { $in: blogs_id } })
+          return AllLeaderBlog.find({ _id: { $in: blogs_id } })
         })
         .then(result => {
           resolve(result);
@@ -137,7 +136,7 @@ class FetchController {
 
   getMayorSavedBlogs(id) {
     return new Promise((resolve, reject) => {
-      MayorSavedBlog.find({mayor_id:id}).sort({ "date_added": -1 })
+      LeaderSavedBlog.find({mayor_id:id}).sort({ "date_added": -1 })
         .then(result => {
           return resolve(result);
         })
@@ -149,7 +148,7 @@ class FetchController {
 
   getTopMayor() {
     return new Promise((resolve, reject) => {
-      ApprovedMayor.find({}).sort({ "approved_blogs_count": -1 }).limit(3)
+      ApprovedLeader.find({}).sort({ "approved_blogs_count": -1 }).limit(3)
         .then(result => {
           return resolve(result);
         })
@@ -162,7 +161,7 @@ class FetchController {
 
   getSingleMayorSavedBlog(id) {
     return new Promise((resolve, reject) => {
-      MayorSavedBlog.findOne({_id:id})
+      LeaderSavedBlog.findOne({_id:id})
         .then(result => {
           return resolve(result);
         })
@@ -189,7 +188,7 @@ class FetchController {
   /* <!------------------------------------------------------**********BLOG END***********-------------------------------------------!> */
   getNotApprovedMayor() {
     return new Promise((resolve, reject) => {
-      NotApprovedMayor.find({})
+      NotApprovedLeader.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -200,7 +199,7 @@ class FetchController {
 
   getSingleNotApprovedMayor(id) {
     return new Promise((resolve, reject) => {
-      NotApprovedMayor.find({ _id: id })
+      NotApprovedLeader.find({ _id: id })
         .then(result => {
           resolve(result)
         })
@@ -211,7 +210,7 @@ class FetchController {
   getSingleApprovedMayor(id) {
     console.log(id, 'dwfcwe')
     return new Promise((resolve, reject) => {
-      ApprovedMayor.find({ _id: id })
+      ApprovedLeader.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -222,7 +221,7 @@ class FetchController {
 
   getApprovedMayor() {
     return new Promise((resolve, reject) => {
-      ApprovedMayor.find({})
+      ApprovedLeader.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -233,7 +232,7 @@ class FetchController {
 
   getAllMayor() {
     return new Promise((resolve, reject) => {
-      AllMayor.find({})
+      AllLeader.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -244,7 +243,7 @@ class FetchController {
 
   getSingleAllMayor(id) {
     return new Promise((resolve, reject) => {
-      AllMayor.find({ _id: id })
+      AllLeader.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)

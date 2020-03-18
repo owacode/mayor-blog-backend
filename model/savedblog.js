@@ -16,4 +16,4 @@ const blog = mongoose.Schema({
   field: 'blog_no'
 });
 
-module.exports = mongoose.model('MayorSavedBlog', blog, 'MayorSavedBlogs')
+module.exports = mongoose.model('LeaderSavedBlog', blog, 'LeaderSavedBlogs')

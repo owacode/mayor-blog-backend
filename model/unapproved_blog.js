@@ -12,4 +12,4 @@ const blog = mongoose.Schema({
   image:{type: String,required:true}
 })
 
-module.exports = mongoose.model('NotApprovedMayorBlog', blog, 'NotApprovedMayorBlogs')
+module.exports = mongoose.model('NotApprovedLeaderBlog', blog, 'NotApprovedLeaderBlogs')

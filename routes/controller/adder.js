@@ -1,12 +1,11 @@
 //  MongoDB Models
-const NotApprovedMayorBlog = require('../../model/unapproved_blog');
-const NotApprovedMayor = require('../../model/unapproved_mayor');
-const ApprovedMayor = require('../../model/approved_mayor');
-const ApprovedMayorBlog = require('../../model/approved_blog');
-const AllMayorBlog = require('../../model/all_blog');
-const MayorSavedBlog = require('../../model/savedblog');
-const AllMayor = require('../../model/all_mayor');
-const mayorVideo = require('../../model/mayor_video');
+const NotApprovedLeaderBlog = require('../../model/unapproved_blog');
+const NotApprovedLeader = require('../../model/unapproved_mayor');
+const ApprovedLeader = require('../../model/approved_mayor');
+const ApprovedLeaderBlog = require('../../model/approved_blog');
+const AllLeaderBlog = require('../../model/all_blog');
+const LeaderSavedBlog = require('../../model/savedblog');
+const AllLeader = require('../../model/all_mayor');
 
 // Controllers
 const deleteController = require('./delete');
@@ -26,7 +25,7 @@ class AdderOperationController {
   // Like a Blog
   likeTheBlog(values) {
     return new Promise((resolve, res) => {
-      ApprovedMayorBlog.findByIdAndUpdate({ _id: values.blogid }, {
+      ApprovedLeaderBlog.findByIdAndUpdate({ _id: values.blogid }, {
         $addToSet: { likes: values.userid }
       })
         .then(result => {
@@ -39,7 +38,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the mayor account (only for approved blogs)
   addLikeBlogToUser(values) {
-    ApprovedMayor.findByIdAndUpdate({ _id: values.blogid }, {
+    ApprovedLeader.findByIdAndUpdate({ _id: values.blogid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -73,7 +72,7 @@ class AdderOperationController {
       this.addBlogToMain(value)
         .then((result) => {
           console.log(result, 'dwdw')
-          const blog = new NotApprovedMayorBlog({
+          const blog = new NotApprovedLeaderBlog({
             title: value.title,
             date_added: getTime(),
             mayor_id: value.mayorid,
@@ -118,7 +117,7 @@ class AdderOperationController {
       deleteController.deleteUnApprovedMayorBlog(value.unapproveid)
         .then(result => {
           // console.log("not approved blog", result);
-          const blog = new ApprovedMayorBlog({
+          const blog = new ApprovedLeaderBlog({
             title: result.title,
             category: value.category,
             sub_category: value.subcategory,
@@ -155,7 +154,7 @@ class AdderOperationController {
   addToMayorSavedBlog(values) {
     console.log('hit to saved blogs', values);
     return new Promise((resolve, reject) => {
-      const blog = new MayorSavedBlog({
+      const blog = new LeaderSavedBlog({
         mayor_id: values.mayorid,
         title: values.title,
         date_added: getTime(),
@@ -180,7 +179,7 @@ class AdderOperationController {
   addBlogToMain(values) {
     console.log('hit all blogs', values);
     return new Promise((resolve, reject) => {
-      const blog = new AllMayorBlog({
+      const blog = new AllLeaderBlog({
         approved_id: 'null',
         unapproved_id: 'null',
         mayor_id: values.mayorid,
@@ -209,7 +208,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the mayor account (only for approved blogs)
   addApprovedMayorBlogToUser(values) {
-    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, {
+    ApprovedLeader.findByIdAndUpdate({ _id: values.mayorid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -218,7 +217,7 @@ class AdderOperationController {
 
   // This methord is for adding the blogid to the mayor account (for unapproved and all blogs)
   addUnApprovedMayorBlogToUser(values) {
-    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, {
+    ApprovedLeader.findByIdAndUpdate({ _id: values.mayorid }, {
       $addToSet: { unapproved_blogs_added: values.blogid, all_blogs_added: values.mainid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -229,7 +228,7 @@ class AdderOperationController {
     const like = {
       blogid: values.blogid
     }
-    ApprovedMayor.findByIdAndUpdate({ _id: values.mayorid }, { $addToSet: { liked_blog: like } })
+    ApprovedLeader.findByIdAndUpdate({ _id: values.mayorid }, { $addToSet: { liked_blog: like } })
       .then(result => console.log("Blog liked added to user"))
       .catch(err => console.log("Error in Adding Blog to liked"))
   }
@@ -242,7 +241,7 @@ class AdderOperationController {
     return new Promise((resolve, reject) => {
       this.addMayorToMain(values)
         .then(result => {
-          const mayor = new NotApprovedMayor({
+          const mayor = new NotApprovedLeader({
             name: values.name,
             bio: 'null',
             image: 'null',
@@ -283,7 +282,7 @@ class AdderOperationController {
         .then(result => {
           approvemayorMail(result.email);
           console.log(result, 'hit app mayor')
-          const mayor = new ApprovedMayor({
+          const mayor = new ApprovedLeader({
             name: result.name,
             bio: result.bio,
             date_added: result.date_added,
@@ -318,7 +317,7 @@ class AdderOperationController {
     return new Promise((resolve, reject) => {
       saltHashPassword(values.password)
         .then(result => {
-          const mayor = new AllMayor({
+          const mayor = new AllLeader({
             approved_id: 'null',
             bio: 'null',
             location: 'null',
@@ -339,11 +338,11 @@ class AdderOperationController {
           return mayor.save();
         })
         .then(result => {
-          console.log("mayor added to AllMayor")
+          console.log("mayor added to AllLeader")
           return resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding mayor to AllMayor", err);
+          console.log("Error in adding mayor to AllLeader", err);
           return reject(err);
         })
     })
@@ -353,7 +352,7 @@ class AdderOperationController {
   login(userdata) {
     return new Promise((resolve, reject) => {
       console.log(userdata);
-      AllMayor.find({ email: userdata.email })
+      AllLeader.find({ email: userdata.email })
         .then(result => {
           console.log('%%%%%%%', result)
           if (result.length == 0) {
@@ -374,7 +373,7 @@ class AdderOperationController {
 
   verifyMail(values) {
     return new Promise((resolve, reject) => {
-      AllMayor.find({ token: values.token })
+      AllLeader.find({ token: values.token })
         .then(result => {
           if (!result) {
             return reject("Invalid Token");
@@ -382,7 +381,7 @@ class AdderOperationController {
           const verification_result = jwt.verify(values.token, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
           const user = verification_result.email;
           console.log(user);
-          AllMayor.findOneAndUpdate({ email: user }, { $set: { verified: true } })
+          AllLeader.findOneAndUpdate({ email: user }, { $set: { verified: true } })
             .then(result => {
               console.log(result, 'User Verified');
               return resolve(result);
