@@ -348,7 +348,7 @@ routes.get('/reset/:token', (req, res) => {
 routes.get('/activate/:token', (req, res) => {
   adderController.verifyMail(req.params)
     .then(result => {
-      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
+      res.status(200).redirect('https://onewater.herokuapp.com/thankyou-leader');
     })
     .catch(err => {
       res.status(400).json({
