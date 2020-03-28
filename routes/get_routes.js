@@ -230,7 +230,7 @@ routes.get('/pending-mayor/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/ApprovedLeader',c.g,c.s, (req, res) => {
+routes.get('/approvedmayor',c.g,c.s, (req, res) => {
   fetchController.getApprovedMayor()
     .then(result => res.status(200).json({
       status: "success",
@@ -258,7 +258,7 @@ routes.get('/topauthor', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/ApprovedLeader/:id', (req, res) => {
+routes.get('/approvedmayor/:id', (req, res) => {
   fetchController.getSingleApprovedMayor(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
