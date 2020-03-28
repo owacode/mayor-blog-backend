@@ -496,7 +496,7 @@ function approvemayorMail(email) {
     text: "Your Profile has been approved for mayor",
     html: `
       <h4> Congratulations Hello Welcome to OneWater Learning Academy<h4>
-      <p>Your Profile has been approved for mayor. You can now Post Blogs. Login and Add Your Blog.
+      <p>Your Profile has been approved for Leader. You can now Post Blogs. Login and Add Your Blog.
       `, // html body
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i)
